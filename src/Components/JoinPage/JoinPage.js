@@ -24,7 +24,7 @@ const JoinPage = () => {
   const history = useHistory();
 
   const handleOnJoinClick = () => {
-    history.push('/Lobby');
+    history.push('/PlayerLobby');
   };
 
   return (

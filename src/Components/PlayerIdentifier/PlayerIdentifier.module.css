@@ -1,0 +1,28 @@
+.icon {
+  display: flex;
+  object-fit: contain;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150;
+}
+
+.playerName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.playerCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}

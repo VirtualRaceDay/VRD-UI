@@ -57,7 +57,7 @@ const HostPage = () => {
   };
 
   const handleOnJoinClick = () => {
-    history.push('/Lobby');
+    history.push('/HostLobby');
   };
 
   return (
