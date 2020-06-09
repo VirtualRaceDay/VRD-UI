@@ -37,3 +37,12 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.finishContainer {
+  display: flex;
+}
+
+.beginContainer {
+  display: flex;
+  padding-left: 1rem;
+}

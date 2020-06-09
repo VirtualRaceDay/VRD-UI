@@ -24,12 +24,22 @@ const PlayerLobby = () => {
   const history = useHistory();
 
   const handleOnJoinClick = () => {
-    history.push('/Lobby');
+    history.push('/Race');
   };
 
   return (
     <Body>
-      <div className={css.pageContainer}>Hi</div>
+      <div className={css.pageContainer}>
+        <h5>CANCER RESEARCH - 3 RACES - R$1000 STAKE</h5>
+        <h1>Game PIN: 12345678</h1>
+        <div className={css.balance}>Balance: $R1000</div>
+        <div className={css.raceCardContainer}>Next Race Card</div>
+        <div className={css.buttonContainer}>
+          <Card className={classes.root} onClick={handleOnJoinClick}>
+            <div>Place Bet</div>
+          </Card>
+        </div>
+      </div>
     </Body>
   );
 };

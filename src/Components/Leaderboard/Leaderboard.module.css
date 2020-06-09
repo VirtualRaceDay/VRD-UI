@@ -1,0 +1,22 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.buttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.finishContainer {
+  display: flex;
+}
+
+.beginContainer {
+  display: flex;
+  padding-left: 1rem;
+}

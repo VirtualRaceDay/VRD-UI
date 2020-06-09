@@ -4,7 +4,6 @@ import PlayerIdentifier from '../PlayerIdentifier/PlayerIdentifier';
 import { useHistory } from 'react-router-dom';
 
 import Card from '@material-ui/core/Card';
-import TextField from '@material-ui/core/TextField';
 
 import { makeStyles } from '@material-ui/core/styles';
 import css from './HostLobby.module.css';
@@ -26,6 +25,10 @@ const HostLobby = () => {
 
   const handleOnJoinClick = () => {
     history.push('/Race');
+  };
+
+  const handleOnFinishClick = () => {
+    history.push('/Host');
   };
 
   const randomPlayer = [
@@ -56,13 +59,20 @@ const HostLobby = () => {
           </ul>
         </div>
         <div className={css.buttonContainer}>
-          <Card
-            type="submit"
-            className={classes.root}
-            onClick={handleOnJoinClick}
-          >
-            <div>Begin Race</div>
-          </Card>
+          <div className={css.finishContainer}>
+            <Card className={classes.root} onClick={handleOnFinishClick}>
+              <div>Finish Event</div>
+            </Card>
+          </div>
+          <div className={css.beginContainer}>
+            <Card
+              type="submit"
+              className={classes.root}
+              onClick={handleOnJoinClick}
+            >
+              <div>Begin Race</div>
+            </Card>
+          </div>
         </div>
       </div>
     </Body>

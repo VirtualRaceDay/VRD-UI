@@ -8,6 +8,8 @@ import HostPage from './Components/HostPage/HostPage';
 import JoinPage from './Components/JoinPage/JoinPage';
 import HostLobby from './Components/HostLobby/HostLobby';
 import PlayerLobby from './Components/PlayerLobby/PlayerLobby';
+import RacePage from './Components/RacePage/RacePage';
+import Leaderboard from './Components/Leaderboard/Leaderboard';
 
 function App() {
   return (
@@ -30,6 +32,12 @@ function App() {
             </Route>
             <Route exact path="/PlayerLobby">
               <PlayerLobby />
+            </Route>
+            <Route exact path="/Race">
+              <RacePage />
+            </Route>
+            <Route exact path="/Leaderboard">
+              <Leaderboard />
             </Route>
             <Route path="*">
               <PageNotFound />
