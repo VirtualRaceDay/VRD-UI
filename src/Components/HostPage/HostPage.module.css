@@ -1,0 +1,48 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.pageHeader {
+  display: flex;
+  height: 3rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.pageContent {
+  display: flex;
+  flex-grow: 1;
+}
+
+.previousRaceContainer {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+}
+
+.createRaceContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 0rem 0rem 0rem 1rem;
+}
+
+.extraFormContent {
+  display: flex;
+  padding-top: 0.5rem;
+  justify-content: space-between;
+}
+
+.raceCardContainer {
+  flex-grow: 1;
+  overflow-x: auto;
+  margin: 1rem 0rem;
+  border: 1px solid #00000026;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+}

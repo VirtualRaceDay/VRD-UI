@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     width: 200,
     height: 200,
-    border: '1px solid #000000',
+    border: '1px solid #00000026',
   },
 });
 
