@@ -19,7 +19,7 @@ const Header = () => {
         style={{ background: '#77DD77', color: '#ffffff' }}
       >
         <Toolbar>
-          <h3 onClick={handleOnLogoClick}>Logo</h3>
+          <h3 onClick={handleOnLogoClick}>A DAY AT THE RACES</h3>
         </Toolbar>
       </AppBar>
     </div>

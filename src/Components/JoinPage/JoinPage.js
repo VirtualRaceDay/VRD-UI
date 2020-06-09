@@ -1,12 +1,12 @@
 import React from 'react';
 import Body from '../Body/Body';
 
-const PageNotFound = () => {
+const JoinPage = () => {
   return (
     <Body>
-      <div>PageNotFound</div>
+      <div>Join</div>
     </Body>
   );
 };
 
-export default PageNotFound;
+export default JoinPage;

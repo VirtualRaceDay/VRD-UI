@@ -1,12 +1,12 @@
 import React from 'react';
 import Body from '../Body/Body';
 
-const PageNotFound = () => {
+const HostPage = () => {
   return (
     <Body>
-      <div>PageNotFound</div>
+      <div>Host</div>
     </Body>
   );
 };
 
-export default PageNotFound;
+export default HostPage;
