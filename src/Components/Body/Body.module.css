@@ -1,0 +1,11 @@
+.Body {
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 2rem 2rem;
+  display: flex;
+  max-height: 100%;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
