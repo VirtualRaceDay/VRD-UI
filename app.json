@@ -1,0 +1,9 @@
+{
+  "name": "Virtual Race Day UI",
+  "repository": "https://github.com/VirtualRaceDay/VRD-UI",
+  "buildpacks": [
+    {
+      "url": "mars/create-react-app"
+    }
+  ]
+}
