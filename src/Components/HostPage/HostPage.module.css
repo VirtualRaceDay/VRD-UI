@@ -13,6 +13,7 @@
 
 .pageContent {
   display: flex;
+  width: 100%;
   flex-grow: 1;
 }
 
@@ -25,6 +26,7 @@
 .createRaceContainer {
   display: flex;
   flex-direction: column;
+  width: 80%;
   flex-grow: 1;
   padding: 0rem 0rem 0rem 1rem;
 }
@@ -32,14 +34,33 @@
 .extraFormContent {
   display: flex;
   padding-top: 0.5rem;
+  width: 100%;
   justify-content: space-between;
 }
 
 .raceCardContainer {
   flex-grow: 1;
+  display: flex;
   overflow-x: auto;
   margin: 1rem 0rem;
+  height: 21rem;
+  align-items: center;
+  width: 100%;
   border: 1px solid #00000026;
+}
+
+.emptyRacecard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.raceCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .buttonContainer {

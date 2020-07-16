@@ -15,6 +15,10 @@ const useStyles = makeStyles({
     width: 120,
     height: 80,
     border: '1px solid #00000026',
+    '&:hover': {
+      backgroundColor: '#fafafa',
+      cursor: 'pointer',
+    },
   },
 });
 
@@ -23,7 +27,7 @@ const Leaderboard = () => {
   const history = useHistory();
 
   const handleOnPlayerLobbyClick = () => {
-    history.push('/PlayerLobby');
+    history.push('/');
   };
   const handleOnHostLobbyClick = () => {
     history.push('/HostLobby');

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Body from '../Body/Body';
 import { useHistory } from 'react-router-dom';
 
@@ -23,8 +23,23 @@ const JoinPage = () => {
   const classes = useStyles();
   const history = useHistory();
 
+  const [pin, setPin] = useState('');
+  const [nickname, setNickname] = useState('');
+
   const handleOnJoinClick = () => {
-    history.push('/PlayerLobby');
+    console.log(pin, nickname);
+    history.push({
+      pathname: '/PlayerLobby',
+      state: { pin: pin, nickname: nickname },
+    });
+  };
+
+  const handlePinChange = (event) => {
+    setPin(event.target.value);
+  };
+
+  const handleNicknameChange = (event) => {
+    setNickname(event.target.value);
   };
 
   return (
@@ -35,11 +50,15 @@ const JoinPage = () => {
             style={{ width: '50%' }}
             id="standard-basic"
             label="Enter Game PIN"
+            value={pin}
+            onChange={handlePinChange}
           />
           <TextField
             style={{ width: '50%' }}
             id="standard-basic"
             label="Enter Nickname"
+            value={nickname}
+            onChange={handleNicknameChange}
           />
         </div>
         <div className={css.joinButtonContainer}>
