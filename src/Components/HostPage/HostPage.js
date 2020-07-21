@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import Body from '../Body/Body';
-import { useHistory, useLocation } from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import RaceCard from '../RaceCard/RaceCard';
 
 import Card from '@material-ui/core/Card';
@@ -17,11 +17,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import css from './HostPage.module.css';
 import AddRacecardDialog from '../AddRaceCard/AddRaceCard';
 
 import randomize from 'randomatic';
+import {postToApi} from "../../utils/apiLayer";
 
 const useStyles = makeStyles({
   table: {
@@ -101,35 +102,23 @@ const HostPage = () => {
     setMaxPlayers(event.target.value);
   };
 
-  const createRaceday = () => {
-    const newRaceday = {
-      name: eventName,
-      currency: currency,
-      pin: randomize('A0', 6),
-      initialStake: initialStake,
-      maxPlayers: maxPlayers,
-      players: [],
-      races: raceCards,
-    };
-    return newRaceday;
-  };
+  const createRaceday = () => ({
+    name: eventName,
+    currency: currency,
+    pin: randomize('A0', 6),
+    initialStake: initialStake,
+    maxPlayers: maxPlayers,
+    players: [],
+    races: raceCards,
+  });
 
-  const handleOnStartButtonClick = () => {
+  const handleOnStartButtonClick = async () => {
     const raceday = createRaceday();
+    const response = await postToApi('/racedays', raceday);
 
-    fetch(`http://localhost:3000/racedays/`, {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify(raceday),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((response) => {
-        if (response) {
-          history.push('/HostLobby');
-        }
-      });
+    if (response.name) {
+      history.push('/HostLobby');
+    }
   };
 
   return (

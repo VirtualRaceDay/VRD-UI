@@ -7,6 +7,8 @@ import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 import css from './PlayerLobby.module.css';
 
+import { getFromApi } from "../../utils/apiLayer";
+
 const useStyles = makeStyles({
   root: {
     display: 'flex',
@@ -21,24 +23,20 @@ const useStyles = makeStyles({
 const PlayerLobby = () => {
   const classes = useStyles();
   const history = useHistory();
-  const props = useLocation().state;
+  const locationProps = useLocation().state;
 
   const [racedayData, setRacedayData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/raceday/${props.pin}`, {
-      method: 'GET',
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((response) => {
-        setRacedayData(response);
-        setIsLoading(false);
-      })
-      .catch((error) => console.log(error));
-  }, [props.pin]);
+    (async () => {
+      setIsLoading(true);
+      // TODO [George]: We should Redux this sometime soon, as async stuff hooks is ugly
+      const response = await getFromApi(`/raceday/${locationProps.pin}`);
+      setRacedayData(response);
+      setIsLoading(false);
+    })();
+  }, [locationProps.pin]);
 
   const handleOnJoinClick = () => {
     history.push('/Race');
