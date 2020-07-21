@@ -147,7 +147,7 @@ const AddRacecardDialog = ({ isOpen, raceCardNo }) => {
         <DialogTitle id="form-dialog-title">Create Race Card</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To create a race card for your event, please enter atleast 2 horses
+            To create a race card for your event, please enter at least 2 horses
             to compete and please select ONLY 1 WINNER!.
           </DialogContentText>
           <div className={css.formContent}>
