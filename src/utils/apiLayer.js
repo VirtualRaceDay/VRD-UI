@@ -1,7 +1,7 @@
 // API interaction layer
 const apiHost = process.env['REACT_APP_API_LOCATION'] || 'http://localhost:3000';
 
-const endpointUri = (endpoint, queryParams = {}) => {
+export const endpointUri = (endpoint, queryParams = {}) => {
   const url = new URL(endpoint, apiHost);
   url.search = new URLSearchParams(queryParams);
   return url;
