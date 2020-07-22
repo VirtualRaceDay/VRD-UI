@@ -1,0 +1,15 @@
+.addRow {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0rem;
+}
+
+.button:hover {
+  color: #f50057;
+}
+
+.formContent {
+  padding: 0rem 0rem 2rem 0rem;
+}

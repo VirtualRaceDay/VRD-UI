@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Body from '../Body/Body';
-import { useHistory } from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
+import RaceCard from '../RaceCard/RaceCard';
 
 import Card from '@material-ui/core/Card';
 import TextField from '@material-ui/core/TextField';
@@ -16,8 +17,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import css from './HostPage.module.css';
+import AddRacecardDialog from '../AddRaceCard/AddRaceCard';
+
+import randomize from 'randomatic';
+import {postToApi} from "../../utils/apiLayer";
 
 const useStyles = makeStyles({
   table: {
@@ -33,6 +38,10 @@ const useStyles = makeStyles({
     width: 120,
     height: 100,
     border: '1px solid #00000026',
+    '&:hover': {
+      backgroundColor: '#fafafa',
+      cursor: 'pointer',
+    },
   },
 });
 
@@ -49,15 +58,67 @@ const rows = [
 const HostPage = () => {
   const classes = useStyles();
   const history = useHistory();
+  let props = useLocation().state;
 
-  const [currency, setCurrency] = React.useState('');
+  const [eventName, setEventName] = useState('');
+  const [currency, setCurrency] = useState('');
+  const [initialStake, setInitialStake] = useState(1000);
+  const [maxPlayers, setMaxPlayers] = useState(12);
+  const [raceCards, setRaceCards] = useState([]);
+  const [modalState, setModalState] = useState(false);
 
-  const handleChange = (event) => {
+  useEffect(() => {
+    if (props) {
+      setModalState(false);
+      if (props.newRaceCard === true) {
+        setRaceCards([...raceCards, props.raceCard]);
+        history.push({
+          pathname: '/Host',
+          state: {
+            newRaceCard: false,
+          },
+        });
+      }
+    }
+  }, [props, raceCards, history]);
+
+  const handleModalOpen = () => {
+    setModalState(true);
+  };
+
+  const handleNameChange = (event) => {
+    setEventName(event.target.value);
+  };
+
+  const handleCurrencyChange = (event) => {
     setCurrency(event.target.value);
   };
 
-  const handleOnJoinClick = () => {
-    history.push('/HostLobby');
+  const handleInitialStakeChange = (event) => {
+    setInitialStake(event.target.value);
+  };
+
+  const handleMaxPlayersChange = (event) => {
+    setMaxPlayers(event.target.value);
+  };
+
+  const createRaceday = () => ({
+    name: eventName,
+    currency: currency,
+    pin: randomize('A0', 6),
+    initialStake: initialStake,
+    maxPlayers: maxPlayers,
+    players: [],
+    races: raceCards,
+  });
+
+  const handleOnStartButtonClick = async () => {
+    const raceday = createRaceday();
+    const response = await postToApi('/racedays', raceday);
+
+    if (response.name) {
+      history.push('/HostLobby');
+    }
   };
 
   return (
@@ -101,7 +162,9 @@ const HostPage = () => {
             <TextField
               style={{ width: '100%' }}
               id="standard-basic"
-              label="Enter Race Name"
+              label="Enter Event Name"
+              value={eventName}
+              onChange={handleNameChange}
             />
             <div className={css.extraFormContent}>
               <FormControl className={classes.formControl}>
@@ -112,22 +175,45 @@ const HostPage = () => {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={currency}
-                  onChange={handleChange}
+                  onChange={handleCurrencyChange}
                 >
                   <MenuItem value={'GPB'}>GPB (£) Sterling</MenuItem>
                   <MenuItem value={'USD'}>USD ($) Dollars</MenuItem>
                   <MenuItem value={'RBX'}>RBX (R$) Racing Bux </MenuItem>
                 </Select>
               </FormControl>
-              <TextField id="standard-basic" label="Initial Currency" />
-              <TextField id="standard-basic" label="Max Players" />
+              <TextField
+                id="standard-basic"
+                label="Initial Stake"
+                value={initialStake}
+                onChange={handleInitialStakeChange}
+              />
+              <TextField
+                id="standard-basic"
+                label="Max Players"
+                value={maxPlayers}
+                onChange={handleMaxPlayersChange}
+              />
             </div>
-            <div className={css.raceCardContainer}>Race Cards</div>
+            <div className={css.raceCardContainer}>
+              <div className={css.emptyRacecard} onClick={handleModalOpen}>
+                <RaceCard />
+              </div>
+              <AddRacecardDialog
+                isOpen={modalState}
+                raceCardNo={raceCards.length}
+              />
+              {raceCards.map((race, key) => (
+                <div key={key} className={css.raceCard}>
+                  <RaceCard raceCard={race} />
+                </div>
+              ))}
+            </div>
             <div className={css.buttonContainer}>
               <Card
                 type="submit"
                 className={classes.button}
-                onClick={handleOnJoinClick}
+                onClick={handleOnStartButtonClick}
               >
                 <div>Start Race Day</div>
               </Card>
