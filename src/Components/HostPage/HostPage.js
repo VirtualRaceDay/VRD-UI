@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Body from '../Body/Body';
 import {useHistory, useLocation} from 'react-router-dom';
-import RaceCard from '../RaceCard/RaceCard';
+import randomize from 'randomatic';
+import moment from 'moment';
 
 import Card from '@material-ui/core/Card';
 import TextField from '@material-ui/core/TextField';
@@ -16,13 +17,14 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import { makeStyles } from '@material-ui/core/styles';
 
-import {makeStyles} from '@material-ui/core/styles';
+import { postToApi } from "../../utils/apiLayer";
+
 import css from './HostPage.module.css';
 import AddRacecardDialog from '../AddRaceCard/AddRaceCard';
-
-import randomize from 'randomatic';
-import {postToApi} from "../../utils/apiLayer";
+import RaceCard from '../RaceCard/RaceCard';
+import useApiGetResult from "../../hooks/useLoading";
 
 const useStyles = makeStyles({
   table: {
@@ -45,20 +47,12 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name) {
-  return { name };
-}
-
-const rows = [
-  createData('Cancer Research'),
-  createData('St. Patricks Day'),
-  createData('Family Fun Night'),
-];
-
 const HostPage = () => {
   const classes = useStyles();
   const history = useHistory();
   let props = useLocation().state;
+
+  const [previousRaces, loadingPreviousRaces] = useApiGetResult([], '/racedays')
 
   const [eventName, setEventName] = useState('');
   const [currency, setCurrency] = useState('');
@@ -142,13 +136,26 @@ const HostPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
-                    <TableRow key={row.name}>
-                      <TableCell component="th" scope="row">
-                        {row.name}
+                  { loadingPreviousRaces ? (
+                    <TableRow>
+                      <TableCell component="td" scope="row">
+                        Loading Races...
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    previousRaces.mapOrDefault(
+                      (<TableRow>
+                        <TableCell component="td" scope="row">
+                          No previous races
+                        </TableCell>
+                      </TableRow>),
+                      (race) => (
+                      <TableRow key={race._id}>
+                        <TableCell component="td" scope="row">
+                          {race.name} - {moment(race.date).format('dd-mm-yyyy')}
+                        </TableCell>
+                      </TableRow>
+                  )))}
                 </TableBody>
               </Table>
             </TableContainer>
