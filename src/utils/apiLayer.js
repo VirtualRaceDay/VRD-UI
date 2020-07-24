@@ -8,24 +8,26 @@ export const endpointUri = (endpoint, queryParams = {}) => {
 }
 
 const responseObject = (data) => ({ data });
-const errorResponse = (method, endpoint, message) => ({
-  error: `Error performing ${method} on ${endpoint}: ${message}`,
+const errorResponse = (code, method, endpoint, message) => ({
+  error: `${code} Error performing ${method} on ${endpoint}: ${message}`,
 });
 
-export const postToApi = async (endpoint, data) => {
+export const postToApi = async (endpoint, payload) => {
   try {
     const res = await fetch(endpointUri(endpoint), {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
 
+    const { code, data } = await res.json();
+
     return res.ok ?
-      responseObject(await res.json()) :
-      errorResponse('GET', endpoint, res.statusText);
+      responseObject(data) :
+      errorResponse(code,'POST', endpoint, data);
 
   } catch (e) {
-    return errorResponse('GET', endpoint, e.message);
+    return errorResponse(500,'POST', endpoint, e.message);
   }
 }
 
@@ -35,10 +37,12 @@ export const getFromApi = async (endpoint, queryParams) => {
       method: 'GET'
     });
 
+    const { code, data } = await res.json();
+
     return res.ok ?
-      responseObject(await res.json()) :
-      errorResponse('GET', endpoint, res.statusText);
+      responseObject(data) :
+      errorResponse(code, 'GET', endpoint, data);
   } catch (e) {
-    return errorResponse('GET', endpoint, e.message);
+    return errorResponse(500,'GET', endpoint, e.message);
   }
 }
