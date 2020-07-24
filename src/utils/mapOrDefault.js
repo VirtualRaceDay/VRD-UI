@@ -1,3 +1,4 @@
+/*eslint no-extend-native: ["error", { "exceptions": ["Array"] }]*/
 if (typeof Array.prototype.mapOrDefault !== 'function') {
   Array.prototype.mapOrDefault = function(defaultValue, callback, thisArg) {
     if (this === null) throw new TypeError('mapOrDefault called on null array');
