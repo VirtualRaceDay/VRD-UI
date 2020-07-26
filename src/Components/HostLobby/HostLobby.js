@@ -29,7 +29,7 @@ const HostLobby = () => {
   const classes = useStyles();
   const history = useHistory();
   const { state = {} } = useLocation();
-  const { id = '5f1df05b570c76663d85aa81' } = state;
+  const { id = '' } = state;
 
   const [raceData, isLoading, error] = useApiGetResult({ races: [] }, `/raceday/${id}`);
   useEffect(() => {
