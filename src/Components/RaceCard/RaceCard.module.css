@@ -5,20 +5,3 @@
   width: 450px;
   overflow-y: auto;
 }
-
-.emptyRacecard {
-  margin: 2% 1%;
-  border-radius: 5%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 3px #fafafa solid;
-  height: 98%;
-  width: 200px;
-  flex-direction: column;
-}
-
-.emptyRacecard:hover {
-  background-color: #fafafa;
-  cursor: pointer;
-}

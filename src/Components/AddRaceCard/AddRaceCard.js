@@ -16,7 +16,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -225,14 +224,10 @@ const AddRacecardDialog = ({ isOpen, raceCardNo }) => {
                     />
                   </TableCell>
                   <TableCell align="center">
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={isWinner}
-                          onChange={handleHorseWinnerChange}
-                          name="winner"
-                        />
-                      }
+                    <Checkbox
+                      checked={isWinner}
+                      onChange={handleHorseWinnerChange}
+                      name="winner"
                     />
                   </TableCell>
                 </TableRow>
@@ -249,7 +244,7 @@ const AddRacecardDialog = ({ isOpen, raceCardNo }) => {
           <Button color="primary" onClick={handleModalClose}>
             Cancel
           </Button>
-          <Button color="primary" onClick={handleModalSubmit}>
+          <Button color="primary" onClick={handleModalSubmit} disabled={rowNumber < 2}>
             Submit
           </Button>
         </DialogActions>
