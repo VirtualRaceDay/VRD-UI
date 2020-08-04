@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { makeStyles } from '@material-ui/core/styles';
 import css from './JoinPage.module.css';
+import { postToApi } from "../../utils/apiLayer";
 
 const useStyles = makeStyles({
   root: {
@@ -26,12 +27,16 @@ const JoinPage = () => {
   const [pin, setPin] = useState('');
   const [nickname, setNickname] = useState('');
 
-  const handleOnJoinClick = () => {
-    console.log(pin, nickname);
-    history.push({
-      pathname: '/PlayerLobby',
-      state: { pin: pin, nickname: nickname },
-    });
+  const handleOnJoinClick = async () => {
+    const response = await postToApi('/player', { pin, nickname });
+    if (!response.error) {
+      history.push({
+        pathname: '/PlayerLobby',
+        state: {pin: pin, nickname: nickname},
+      });
+    } else {
+      alert(`There was an error joining the game!\n${response.error}`);
+    }
   };
 
   const handlePinChange = (event) => {

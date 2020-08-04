@@ -109,10 +109,10 @@ const HostPage = () => {
 
   const handleOnStartButtonClick = async () => {
     const raceday = createRaceday();
-    const response = await postToApi('/racedays', raceday);
+    const { data } = await postToApi('/racedays', raceday);
 
-    if (response.id) {
-      history.push('/HostLobby', { id: response.id });
+    if (data.id) {
+      history.push('/HostLobby', { id: data.id });
     }
   };
 

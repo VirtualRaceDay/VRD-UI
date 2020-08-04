@@ -5,6 +5,7 @@ const useApiGetResult = (defaultVal, endpoint, queryParams) => {
   const [ isLoading, setIsLoading ] = useState(true);
   const [ queryState, setQueryState ] = useState(queryParams);
   const [ result, setResult ] = useState(defaultVal);
+  const [ apiError, setApiError ] = useState('');
 
   useEffect(() => {
     setIsLoading(true);
@@ -14,13 +15,13 @@ const useApiGetResult = (defaultVal, endpoint, queryParams) => {
       if (data) {
         setResult(data)
       } else {
-        console.error(error);
+        setApiError(error);
       }
       setIsLoading(false);
     })();
   }, [endpoint, queryState]);
 
-  return [ result, isLoading, setQueryState];
+  return [ result, isLoading, apiError, setQueryState];
 };
 
 export default useApiGetResult;
