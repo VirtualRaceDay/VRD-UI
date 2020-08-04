@@ -29,7 +29,7 @@ const HostLobby = () => {
   const classes = useStyles();
   const history = useHistory();
   const { state = {} } = useLocation();
-  const { id = '' } = state;
+  const { id } = state;
 
   const [raceData, isLoading, error] = useApiGetResult({ races: [] }, `/raceday/${id}`);
   useEffect(() => {
@@ -61,7 +61,7 @@ const HostLobby = () => {
           <h1>Loading race data...</h1>
         ) : (
           <>
-            <h5>{raceData.name} - {raceData.races.length} RACES - {raceData.currency}{raceData.initialStake} STAKE</h5>
+            <h5>{raceData.name} - {raceData.races.length} RACES</h5>
             <h1>Game PIN: {raceData.pin}</h1>
             <div className={css.players}>
               { !players.length ? (
