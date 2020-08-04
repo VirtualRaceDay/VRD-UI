@@ -30,9 +30,14 @@ const JoinPage = () => {
   const handleOnJoinClick = async () => {
     const response = await postToApi('/player', { pin, nickname });
     if (!response.error) {
+      const { data } = response;
       history.push({
         pathname: '/PlayerLobby',
-        state: {pin: pin, nickname: nickname},
+        state: {
+          playerId: data.playerId,
+          raceDayId: data.raceDayId,
+          nickname: nickname
+        },
       });
     } else {
       alert(`There was an error joining the game!\n${response.error}`);
