@@ -1,11 +1,14 @@
 import React from 'react';
 import Body from '../Body/Body';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import Card from '@material-ui/core/Card';
 
 import { makeStyles } from '@material-ui/core/styles';
 import css from './Leaderboard.module.css';
+import useApiGetResult from "../../hooks/useLoading";
+import { currency } from "../../utils/constants";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
@@ -25,6 +28,11 @@ const useStyles = makeStyles({
 const Leaderboard = () => {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
+  const { state = {} } = location;
+  const { raceDayId, isHost } = state;
+
+  const [leaderBoard, isLoading, apiError] = useApiGetResult({ currency: '', players: [] }, `/raceday/${raceDayId}/leaderboard`);
 
   const handleOnPlayerLobbyClick = () => {
     history.push('/');
@@ -33,19 +41,55 @@ const Leaderboard = () => {
     history.push('/HostLobby');
   };
 
+  const currencyPrefix = currency[leaderBoard.currency];
+
   return (
     <Body>
-      <h3 className={css.pageContainer}>Leaderboard</h3>
-      <div className={css.buttonContainer}>
-        <div className={css.finishContainer}>
-          <Card className={classes.root} onClick={handleOnHostLobbyClick}>
-            <div>Host Lobby</div>
-          </Card>
+      <div className={css.pageContainer}>
+        <div className={css.pageHeader}>
+          <h1>Leaderboard</h1>
         </div>
-        <div className={css.beginContainer}>
-          <Card className={classes.root} onClick={handleOnPlayerLobbyClick}>
-            <div>Player Lobby</div>
-          </Card>
+        <div className={css.pageContent}>
+        { isLoading ? (
+          <div>Loading</div>
+        ) : apiError ? (
+          <div>{apiError}</div>
+        ) : (
+          <div className={css.leaderboardTable}>
+          <TableContainer component={Paper}>
+            <Table aria-label='leaderboard'>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Current Wealth</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {leaderBoard.players.map(({_id, name, currentFunds}) => (
+                  <TableRow key={_id}>
+                    <TableCell>{name}</TableCell>
+                    <TableCell>{currencyPrefix}{currentFunds}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          </div>
+        )}
+        </div>
+        <div className={css.buttonContainer}>
+          {isHost && (
+            <div className={css.finishContainer}>
+              <Card className={classes.root} onClick={handleOnHostLobbyClick}>
+                <div>Host Lobby</div>
+              </Card>
+            </div>
+          )}
+          <div className={css.beginContainer}>
+            <Card className={classes.root} onClick={handleOnPlayerLobbyClick}>
+              <div>Player Lobby</div>
+            </Card>
+          </div>
         </div>
       </div>
     </Body>
