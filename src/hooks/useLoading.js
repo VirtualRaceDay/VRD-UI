@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { getFromApi } from "../utils/apiLayer";
 
 const useApiGetResult = (defaultVal, endpoint, queryParams) => {
-  const [ isLoading, setIsLoading ] = useState(true);
-  const [ queryState, setQueryState ] = useState(queryParams);
-  const [ result, setResult ] = useState(defaultVal);
-  const [ apiError, setApiError ] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [queryState, setQueryState] = useState(queryParams);
+  const [result, setResult] = useState(defaultVal);
+  const [apiError, setApiError] = useState('');
 
   useEffect(() => {
     setIsLoading(true);
@@ -21,7 +21,7 @@ const useApiGetResult = (defaultVal, endpoint, queryParams) => {
     })();
   }, [endpoint, queryState]);
 
-  return [ result, isLoading, apiError, setQueryState];
+  return [result, isLoading, apiError, setQueryState];
 };
 
 export default useApiGetResult;
