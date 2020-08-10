@@ -52,13 +52,13 @@ const PlayerLobby = () => {
   }, [raceDataApiError, playerDataApiError]);
 
   const handlePlaceBet = async () => {
-    console.log('Place Bet: ', raceDayData.races[0].horses);
-    const raceCard = raceDayData.races[0]
-
+    const raceCard = getNextRace(0);
     const wagers = raceCard.horses.filter(horse => {
       return (horse.bet);
     }).map(horse => {
       return {
+        player: state.playerId,
+        race: raceCard._id,
         horseNumber: horse.number,
         amount: horse.bet
       }
@@ -66,7 +66,6 @@ const PlayerLobby = () => {
 
     await postToApi('/wagers', {
       player: state.playerId,
-      race: raceCard.id,
       wagers: wagers
     });
   };

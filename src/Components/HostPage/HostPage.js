@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Body from '../Body/Body';
-import {useHistory, useLocation} from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import randomize from 'randomatic';
 import moment from 'moment';
 
@@ -97,6 +97,11 @@ const HostPage = () => {
     setMaxPlayers(event.target.value);
   };
 
+  const createData = () => ({
+    raceDay: createRaceday(),
+    races: raceCards
+  });
+
   const createRaceday = () => ({
     name: eventName,
     currency: currency,
@@ -104,11 +109,11 @@ const HostPage = () => {
     initialStake: initialStake,
     maxPlayers: maxPlayers,
     players: [],
-    races: raceCards,
+    races: [],
   });
 
   const handleOnStartButtonClick = async () => {
-    const raceday = createRaceday();
+    const raceday = createData();
     const { data } = await postToApi('/racedays', raceday);
 
     if (data.id) {
@@ -137,26 +142,26 @@ const HostPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  { loadingPreviousRaces ? (
+                  {loadingPreviousRaces ? (
                     <TableRow>
                       <TableCell component="td" scope="row">
                         Loading Races...
                       </TableCell>
                     </TableRow>
                   ) : (
-                    previousRaces.mapOrDefault(
-                      (<TableRow key="default">
-                        <TableCell component="td" scope="row">
-                          No previous races
+                      previousRaces.mapOrDefault(
+                        (<TableRow key="default">
+                          <TableCell component="td" scope="row">
+                            No previous races
                         </TableCell>
-                      </TableRow>),
-                      (race) => (
-                      <TableRow key={race._id}>
-                        <TableCell component="td" scope="row">
-                          {race.name} - {moment(race.date).format('DD-MM-YYYY')}
-                        </TableCell>
-                      </TableRow>
-                  )))}
+                        </TableRow>),
+                        (race) => (
+                          <TableRow key={race._id}>
+                            <TableCell component="td" scope="row">
+                              {race.name} - {moment(race.date).format('DD-MM-YYYY')}
+                            </TableCell>
+                          </TableRow>
+                        )))}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -227,7 +232,6 @@ const HostPage = () => {
       </div>
       <AddRacecardDialog
         isOpen={modalState}
-        raceCardNo={raceCards.length}
       />
     </Body>
   );

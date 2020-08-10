@@ -35,7 +35,7 @@ const useStyles = makeStyles({
   },
 });
 
-const AddRacecardDialog = ({ isOpen, raceCardNo }) => {
+const AddRacecardDialog = ({ isOpen }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -130,7 +130,6 @@ const AddRacecardDialog = ({ isOpen, raceCardNo }) => {
         modalState: false,
         newRaceCard: true,
         raceCard: {
-          id: raceCardNo + 1,
           name: raceName,
           link: link,
           horses: horses,
