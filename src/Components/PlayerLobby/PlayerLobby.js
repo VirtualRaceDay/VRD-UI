@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../Body/Body';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import Card from '@material-ui/core/Card';
 
@@ -11,6 +11,7 @@ import useApiGetResult from "../../hooks/useLoading";
 import { postToApi } from '../../utils/apiLayer';
 import { currency } from "../../utils/constants";
 import WagerCard from '../WagerCard/WagerCard';
+import { useWebsocket } from "../../hooks/useWebsocket";
 
 const useStyles = makeStyles({
   root: {
@@ -25,8 +26,10 @@ const useStyles = makeStyles({
 
 const PlayerLobby = () => {
   const classes = useStyles();
+  const history = useHistory();
   const { state = {} } = useLocation();
-  const { raceDayId } = state;
+  const { sessionInfo } = state;
+  const { raceDayId } = sessionInfo;
 
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState({ error: false, messages: [] });
@@ -35,8 +38,22 @@ const PlayerLobby = () => {
   const [raceDayData, isRaceDataLoading, raceDataApiError] = useApiGetResult({ races: [] }, raceDayEndpoint);
   const [playerData, isPlayerDataLoading, playerDataApiError] = useApiGetResult([], `${raceDayEndpoint}/leaderboard`);
 
+  const [advanceToRace] = useWebsocket('/eventstate');
+
+  useEffect(() => {
+    if (advanceToRace === 'started') {
+      history.push('/Race',
+        {
+          race: getNextRace(),
+          sessionInfo
+        });
+    }
+  }, [advanceToRace])
+
   const getNextRace = () => {
-    return raceDayData.races[0];
+    return raceDayData.races.find((race) => {
+      return race.state === "not-started"
+    });
   }
 
   useEffect(() => {
@@ -52,12 +69,12 @@ const PlayerLobby = () => {
   }, [raceDataApiError, playerDataApiError]);
 
   const handlePlaceBet = async () => {
-    const raceCard = getNextRace(0);
+    const raceCard = getNextRace();
     const wagers = raceCard.horses.filter(horse => {
       return (horse.bet);
     }).map(horse => {
       return {
-        player: state.playerId,
+        player: sessionInfo.playerId,
         race: raceCard._id,
         horseNumber: horse.number,
         amount: horse.bet

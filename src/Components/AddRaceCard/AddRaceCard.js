@@ -131,8 +131,6 @@ const AddRacecardDialog = ({ isOpen, raceDayId }) => {
       horses: horses,
     };
 
-    console.log('RACE_DAY_ID: ', raceDayId);
-
     const input = {
       race,
       raceDayId

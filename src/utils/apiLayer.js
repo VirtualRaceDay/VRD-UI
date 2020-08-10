@@ -24,10 +24,30 @@ export const postToApi = async (endpoint, payload) => {
 
     return res.ok ?
       responseObject(data) :
-      errorResponse(code,'POST', endpoint, data);
+      errorResponse(code, 'POST', endpoint, data);
 
   } catch (e) {
-    return errorResponse(500,'POST', endpoint, e.message);
+    return errorResponse(500, 'POST', endpoint, e.message);
+  }
+}
+
+
+export const putToApi = async (endpoint, payload) => {
+  try {
+    const res = await fetch(endpointUri(endpoint), {
+      method: 'PUT',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    const { code, data } = await res.json();
+
+    return res.ok ?
+      responseObject(data) :
+      errorResponse(code, 'POST', endpoint, data);
+
+  } catch (e) {
+    return errorResponse(500, 'POST', endpoint, e.message);
   }
 }
 
@@ -43,6 +63,6 @@ export const getFromApi = async (endpoint, queryParams) => {
       responseObject(data) :
       errorResponse(code, 'GET', endpoint, data);
   } catch (e) {
-    return errorResponse(500,'GET', endpoint, e.message);
+    return errorResponse(500, 'GET', endpoint, e.message);
   }
 }

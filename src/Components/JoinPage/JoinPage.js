@@ -34,9 +34,11 @@ const JoinPage = () => {
       history.push({
         pathname: '/PlayerLobby',
         state: {
-          playerId: data.playerId,
-          raceDayId: data.raceDayId,
-          nickname: nickname
+          sessionInfo: {
+            playerId: data.playerId,
+            raceDayId: data.raceDayId,
+            nickname: nickname
+          }
         },
       });
     } else {

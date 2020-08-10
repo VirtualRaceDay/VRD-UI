@@ -9,6 +9,7 @@ import PlayerIdentifier from '../PlayerIdentifier/PlayerIdentifier';
 import Body from '../Body/Body';
 import { useWebsocket } from "../../hooks/useWebsocket";
 import useApiGetResult from "../../hooks/useLoading";
+import { putToApi } from "../../utils/apiLayer";
 
 const useStyles = makeStyles({
   root: {
@@ -29,26 +30,56 @@ const HostLobby = () => {
   const classes = useStyles();
   const history = useHistory();
   const { state = {} } = useLocation();
-  const { id } = state;
 
-  const [raceData, isLoading, error] = useApiGetResult({ races: [] }, `/raceday/${id}`);
-  useEffect(() => {
-    if (!isLoading && error) {
-      history.replace('/Host');
-    }
-  });
+  const { sessionInfo } = state;
+  const { lobbyId } = sessionInfo;
 
+  const [raceData, isLoading] = useApiGetResult({ races: [] }, `/raceday/${lobbyId}`);
   const [incomingPlayer] = useWebsocket('/playerlist');
   const [players, setPlayers] = useState([]);
+
+
+
   useEffect(() => {
     if (incomingPlayer.name) {
       setPlayers(p => [...p, incomingPlayer]);
     }
   }, [incomingPlayer]);
 
-  const handleOnJoinClick = () => {
-    history.push('/Race');
+  const getNextRace = () => {
+    const nextRace = raceData.races.find((race) => {
+      return race.state === 'not-started'
+    });
+
+    return nextRace;
+  }
+
+  const nextRace = getNextRace();
+
+  const isFirstRace = () => {
+    return raceData.races[0].state === 'not-started'
   };
+
+  const hasAnotherRace = () => {
+
+    return (nextRace !== undefined);
+  }
+
+  const startNextRaceClick = async () => {
+    // Set race next started
+    const response = await putToApi(`/race/${nextRace._id}/start`);
+
+    if (!response.error) {
+      history.push({
+        pathname: '/race',
+        state: {
+          race: nextRace._id,
+          isHost: true,
+          sessionInfo
+        },
+      });
+    };
+  }
 
   const handleOnFinishClick = () => {
     history.push('/Host');
@@ -57,42 +88,65 @@ const HostLobby = () => {
   return (
     <Body>
       <div className={css.pageContainer}>
-        { isLoading ? (
+        {isLoading ? (
           <h1>Loading race data...</h1>
-        ) : (
-          <>
-            <h5>{raceData.name} - {raceData.races.length} RACES</h5>
-            <h1>Game PIN: {raceData.pin}</h1>
-            <div className={css.players}>
-              { !players.length ? (
-                <h4>Waiting for players</h4>
-                ) : (
-              <ul>
-                { players.mapOrDefault(false,
-                  (player, idx) => (
-                    <li key={idx}>{<PlayerIdentifier name={player.name} />}</li>
-                  ))}
-              </ul>
-                )}
-            </div>
-            <div className={css.buttonContainer}>
-              <div className={css.finishContainer}>
-                <Card className={classes.root} onClick={handleOnFinishClick}>
-                  <div>Finish Event</div>
-                </Card>
+        )
+          : (
+            <>
+              {hasAnotherRace() ? (
+                <>
+                  <h5>{raceData.name} - {raceData.races.length} RACES</h5>
+                  {isFirstRace() ?
+                    (<h3>The first race is - {nextRace.name}</h3>)
+                    : (<h3> The next race is - {nextRace.name}</h3>)
+                  }
+                  <h3>Place Your Bets!</h3>
+                  {isFirstRace() ? (
+                    <>
+                      <h1>Game PIN: {raceData.pin}</h1>
+                      <div className={css.players}>
+                        {!players.length ? (
+                          <h4>Waiting for players</h4>
+                        ) : (
+                            <ul>
+                              {players.mapOrDefault(false,
+                                (player, idx) => (
+                                  <li key={idx}>{<PlayerIdentifier name={player.name} />}</li>
+                                ))}
+                            </ul>
+                          )}
+                      </div>
+                    </>
+                  ) : ('')}
+
+                </>
+              ) : (<div>
+                Event Complete
+              </div>)}
+
+              <div className={css.buttonContainer}>
+                {!hasAnotherRace() ?
+                  (
+                    <div className={css.finishContainer}>
+                      <Card className={classes.root} onClick={handleOnFinishClick}>
+                        <div>Finish Event</div>
+                      </Card>
+                    </div>
+                  )
+                  : (
+                    <div className={css.beginContainer}>
+                      <Card
+                        type="submit"
+                        className={classes.root}
+                        onClick={startNextRaceClick}
+                      >
+                        <div>Begin Next Race</div>
+                      </Card>
+                    </div>
+                  )}
               </div>
-              <div className={css.beginContainer}>
-                <Card
-                  type="submit"
-                  className={classes.root}
-                  onClick={handleOnJoinClick}
-                >
-                  <div>Begin First Race</div>
-                </Card>
-              </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
       </div>
     </Body>
   );

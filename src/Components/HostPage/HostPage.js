@@ -99,11 +99,6 @@ const HostPage = () => {
     setMaxPlayers(event.target.value);
   };
 
-  // const createData = () => ({
-  //   raceDay: createRaceday(),
-  //   races: raceCards
-  // });
-
   const createRaceday = () => ({
     name: eventName,
     currency: currency,
@@ -116,7 +111,11 @@ const HostPage = () => {
 
   const handleOnStartButtonClick = async () => {
     if (lobbyId)
-      history.push('/HostLobby', { id: lobbyId });
+      history.push('/HostLobby', {
+        sessionInfo: {
+          lobbyId
+        }
+      });
   };
 
   const handleSaveRaceDayClick = async () => {
