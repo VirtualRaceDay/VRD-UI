@@ -17,6 +17,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { postToApi } from "../../utils/apiLayer";
 
 import { makeStyles } from '@material-ui/core/styles';
 import css from './AddRaceCard.module.css';
@@ -35,7 +36,7 @@ const useStyles = makeStyles({
   },
 });
 
-const AddRacecardDialog = ({ isOpen }) => {
+const AddRacecardDialog = ({ isOpen, raceDayId }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -121,9 +122,26 @@ const AddRacecardDialog = ({ isOpen }) => {
     });
   };
 
-  const handleModalSubmit = () => {
+  const handleModalSubmit = async () => {
     handleAddClick();
+
+    const race = {
+      name: raceName,
+      link,
+      horses: horses,
+    };
+
+    console.log('RACE_DAY_ID: ', raceDayId);
+
+    const input = {
+      race,
+      raceDayId
+    }
+
+    const { data } = await postToApi('/race', input);
+
     setModalState(false);
+
     history.push({
       pathname: '/Host',
       state: {
@@ -136,6 +154,7 @@ const AddRacecardDialog = ({ isOpen }) => {
         },
       },
     });
+
     clearForm();
   };
 

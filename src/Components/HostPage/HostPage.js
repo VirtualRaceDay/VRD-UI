@@ -61,6 +61,8 @@ const HostPage = () => {
   const [maxPlayers, setMaxPlayers] = useState(12);
   const [raceCards, setRaceCards] = useState([]);
   const [modalState, setModalState] = useState(false);
+  const [raceCardSaved, setRaceCardSaved] = useState(false);
+  const [lobbyId, setLobbyId] = useState('');
 
   useEffect(() => {
     if (!props) return;
@@ -97,10 +99,10 @@ const HostPage = () => {
     setMaxPlayers(event.target.value);
   };
 
-  const createData = () => ({
-    raceDay: createRaceday(),
-    races: raceCards
-  });
+  // const createData = () => ({
+  //   raceDay: createRaceday(),
+  //   races: raceCards
+  // });
 
   const createRaceday = () => ({
     name: eventName,
@@ -113,13 +115,20 @@ const HostPage = () => {
   });
 
   const handleOnStartButtonClick = async () => {
-    const raceday = createData();
+    if (lobbyId)
+      history.push('/HostLobby', { id: lobbyId });
+  };
+
+  const handleSaveRaceDayClick = async () => {
+    const raceday = createRaceday();
     const { data } = await postToApi('/racedays', raceday);
 
     if (data.id) {
-      history.push('/HostLobby', { id: data.id });
+      setLobbyId(data.id);
     }
-  };
+
+    setRaceCardSaved(true);
+  }
 
   return (
     <Body>
@@ -208,32 +217,42 @@ const HostPage = () => {
                 onChange={handleMaxPlayersChange}
               />
             </div>
-            <div className={css.raceCardContainer}>
-              <div className={css.emptyRacecard} onClick={handleModalOpen}>
-                <AddRaceCardButton />
-              </div>
-              {raceCards.map((race, key) => (
-                <div key={key} className={css.raceCard}>
-                  <RaceCard raceCard={race} />
+            {!raceCardSaved ? (<div></div>) : (
+              <div className={css.raceCardContainer}>
+                <div className={css.emptyRacecard} onClick={handleModalOpen}>
+                  <AddRaceCardButton />
                 </div>
-              ))}
-            </div>
+                {raceCards.map((race, key) => (
+                  <div key={key} className={css.raceCard}>
+                    <RaceCard raceCard={race} />
+                  </div>
+                ))}
+              </div>)}
             <div className={css.buttonContainer}>
-              <Card
-                type="submit"
-                className={classes.button}
-                onClick={handleOnStartButtonClick}
-              >
-                <div>Start Race Day</div>
-              </Card>
+              {!raceCardSaved ? (
+                <Card
+                  type="submit"
+                  className={classes.button}
+                  onClick={handleSaveRaceDayClick}
+                >
+                  <div>Create Race Day</div>
+                </Card>) : ('')}
+              {!raceCardSaved ? ('') : (
+                <Card
+                  type="submit"
+                  className={classes.button}
+                  onClick={handleOnStartButtonClick}
+                >
+                  <div>Start Race Day</div>
+                </Card>)}
             </div>
           </form>
         </div>
       </div>
       <AddRacecardDialog
         isOpen={modalState}
-      />
-    </Body>
+        raceDayId={lobbyId} />
+    </Body >
   );
 };
 
