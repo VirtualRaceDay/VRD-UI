@@ -82,7 +82,7 @@ const PlayerLobby = () => {
     });
 
     await postToApi('/wagers', {
-      player: state.playerId,
+      player: sessionInfo.playerId,
       wagers: wagers
     });
   };
