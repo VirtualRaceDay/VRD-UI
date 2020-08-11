@@ -33,10 +33,12 @@ const PlayerLobby = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState({ error: false, messages: [] });
+ 
   const raceDayEndpoint = `/raceday/${raceDayId}`;
 
   const [raceDayData, isRaceDataLoading, raceDataApiError] = useApiGetResult({ races: [] }, raceDayEndpoint);
   const [playerData, isPlayerDataLoading, playerDataApiError] = useApiGetResult([], `${raceDayEndpoint}/leaderboard`);
+  const [currentPlayerBalance, setCurrentPlayerBalance] = useState(0);
 
   const [advanceToRace] = useWebsocket('/eventstate');
 
@@ -87,10 +89,17 @@ const PlayerLobby = () => {
     });
   };
 
+  useEffect(() => {
+    if(playerData.players !== undefined)
+      setCurrentPlayerBalance(playerData.players.find(x => x._id === sessionInfo.playerId).currentFunds);
+  }, [isPlayerDataLoading]);
+
+
+
   return (
     <Body>
       <div className={css.pageContainer}>
-        {isLoading ? (
+        {isLoading && isPlayerDataLoading ? (
           <div>Loading.....Please Wait</div>
         ) : apiError.error ? (
           <div>
@@ -105,7 +114,7 @@ const PlayerLobby = () => {
               <>
                 <h5>{raceDayData.name} - {raceDayData.races.length} RACES</h5>
                 <h1>Game PIN: {raceDayData.pin}</h1>
-                <div className={css.balance}>Balance: {currency[raceDayData.currency]}{playerData.currentFunds}</div>
+                <div className={css.balance}>Balance: £{currentPlayerBalance}</div>
                 <div className={css.raceCardContainer}>
                   <WagerCard raceCard={getNextRace()}>
 
