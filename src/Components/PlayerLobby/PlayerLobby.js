@@ -37,6 +37,8 @@ const PlayerLobby = () => {
 
   const [raceDayData, isRaceDataLoading, raceDataApiError] = useApiGetResult({ races: [] }, raceDayEndpoint);
   const [playerData, isPlayerDataLoading, playerDataApiError] = useApiGetResult([], `${raceDayEndpoint}/leaderboard`);
+  //Note, this needs to be replaced with the players current balance when this functionality has been created
+  const [raceBalance, setRaceBalance] = useState(1000);
 
   const [advanceToRace] = useWebsocket('/eventstate');
 
@@ -49,6 +51,8 @@ const PlayerLobby = () => {
         });
     }
   }, [advanceToRace])
+
+
 
   const getNextRace = () => {
     return raceDayData.races.find((race) => {
@@ -67,6 +71,22 @@ const PlayerLobby = () => {
       messages,
     });
   }, [raceDataApiError, playerDataApiError]);
+
+
+  const handleBetsChanged = () => {
+    const raceCard = getNextRace();
+    const horses = raceCard.horses;
+
+    //Replace with the current balance of the player when this feature has been implemented.
+    let currentBalance = parseFloat(raceDayData.initialStake);
+
+    horses.forEach(horse => {
+      if (horse.bet)
+        currentBalance -= parseFloat(horse.bet);
+    })
+
+    setRaceBalance(currentBalance);
+  }
 
   const handlePlaceBet = async () => {
     const raceCard = getNextRace();
@@ -107,7 +127,7 @@ const PlayerLobby = () => {
                 <h1>Game PIN: {raceDayData.pin}</h1>
                 <div className={css.balance}>Balance: {currency[raceDayData.currency]}{playerData.currentFunds}</div>
                 <div className={css.raceCardContainer}>
-                  <WagerCard raceCard={getNextRace()}>
+                  <WagerCard raceCard={getNextRace()} callback={handleBetsChanged}>
 
                   </WagerCard>
 

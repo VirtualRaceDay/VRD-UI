@@ -3,7 +3,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField'
 
-const RaceCardLine = ({ initialHorse }) => {
+const RaceCardLine = ({ initialHorse, callback }) => {
   const [horse, setHorse] = useState(initialHorse);
   const [returns, setReturns] = useState('');
 
@@ -14,6 +14,8 @@ const RaceCardLine = ({ initialHorse }) => {
 
     setReturns(horse.potentialReturns);
     setHorse(horse);
+
+    return callback();
   }
 
   return (
