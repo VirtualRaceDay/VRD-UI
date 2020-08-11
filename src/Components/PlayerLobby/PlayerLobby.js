@@ -45,6 +45,7 @@ const PlayerLobby = () => {
       history.push('/Race',
         {
           race: getNextRace(),
+          isLastRace: isLastRace(),
           sessionInfo
         });
     }
@@ -67,6 +68,12 @@ const PlayerLobby = () => {
       messages,
     });
   }, [raceDataApiError, playerDataApiError]);
+
+  const isLastRace = () => {
+    return (raceDayData.races.filter(race => {
+      return race.state === 'not-started'
+    }).length === 1)
+  }
 
   const handlePlaceBet = async () => {
     const raceCard = getNextRace();

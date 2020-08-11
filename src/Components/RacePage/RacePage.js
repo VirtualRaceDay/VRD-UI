@@ -35,9 +35,16 @@ const RacePage = () => {
     if (isHost()) return;
 
     if (advanceToRace === 'finished') {
-      history.push('/PlayerLobby', {
-        sessionInfo
-      });
+      if (!isLastRace()) {
+        history.push('/PlayerLobby', {
+          sessionInfo
+        });
+      }
+      else {
+        history.push('/Podium', {
+          sessionInfo
+        });
+      }
     }
   }, [advanceToRace, history])
 
@@ -46,10 +53,18 @@ const RacePage = () => {
     const response = await putToApi(`/race/${state.race}/finish`);
 
     if (!response.error) {
-      history.push('/HostLobby',
-        {
-          sessionInfo
-        });
+      if (!isLastRace()) {
+        history.push('/HostLobby',
+          {
+            sessionInfo
+          });
+      }
+      else {
+        history.push('/Podium',
+          {
+            sessionInfo
+          });
+      }
     }
   };
 
@@ -57,9 +72,14 @@ const RacePage = () => {
     return state.isHost || false
   }
 
+  const isLastRace = () => { return state.isLastRace || false }
+
   return (
     < Body >
       <h3 className={css.pageContainer}>Race in progress</h3>
+      {isLastRace() ? (
+        <h1>LAST RACE!</h1>
+      ) : ''}
       <div className={css.buttonContainter}>
         {isHost() ? (
           <Card className={classes.root} onClick={handleOnFinishClick}>
