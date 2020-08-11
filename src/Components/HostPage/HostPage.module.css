@@ -17,12 +17,6 @@
   flex-grow: 1;
 }
 
-.previousRaceContainer {
-  display: flex;
-  flex-direction: column;
-  width: 20%;
-}
-
 .createRaceContainer {
   display: flex;
   flex-direction: column;

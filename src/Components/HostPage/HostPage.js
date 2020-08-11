@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import randomize from 'randomatic';
-import moment from 'moment';
 import Card from '@material-ui/core/Card';
 import TextField from '@material-ui/core/TextField';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -19,16 +11,13 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { postToApi } from '../../utils/apiLayer';
 import Body from '../Body/Body';
+import PreviousRaces from './PreviousRaces';
 import AddRaceCard from '../AddRaceCard/AddRaceCard';
 import RaceCard from '../RaceCard/RaceCard';
-import useApiGetResult from '../../hooks/useLoading';
 import AddRaceCardButton from './AddRaceCardButton';
 import css from './HostPage.module.css';
 
 const useStyles = makeStyles({
-    table: {
-        minWidth: 200,
-    },
     formControl: {
         minWidth: 160,
     },
@@ -51,7 +40,6 @@ const HostPage = () => {
     const history = useHistory();
     const props = useLocation().state;
 
-    const [previousRaces, loadingPreviousRaces] = useApiGetResult([], '/racedays');
     const [eventName, setEventName] = useState('');
     const [currency, setCurrency] = useState('');
     const [initialStake, setInitialStake] = useState(1000);
@@ -141,49 +129,7 @@ const HostPage = () => {
                 </div>
 
                 <div className={css.pageContent}>
-                    <div className={css.previousRaceContainer}>
-                        <TableContainer component={Paper}>
-                            <Table className={classes.table} aria-label="Previous race days">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell
-                                            style={{ backgroundColor: '#77dd77', color: '#ffffff' }}
-                                        >
-                                            Previous Race Days
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-
-                                <TableBody>
-                                    {loadingPreviousRaces
-                                        ? (
-                                            <TableRow>
-                                                <TableCell component="td" scope="row">
-                                                    Loading Races...
-                                                </TableCell>
-                                            </TableRow>
-                                        )
-                                        : (previousRaces.mapOrDefault(
-                                            (
-                                                <TableRow key="default">
-                                                    <TableCell component="td" scope="row">
-                                                        No previous races
-                                                    </TableCell>
-                                                </TableRow>
-                                            ),
-                                            (race) => (
-                                                <TableRow key={race._id}>
-                                                    <TableCell component="td" scope="row">
-                                                        {race.name} - {moment(race.date).format('DD-MM-YYYY')}
-                                                    </TableCell>
-                                                </TableRow>
-                                            )
-                                        ))
-                                    }
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </div>
+                    <PreviousRaces />
 
                     <form
                         className={css.createRaceContainer}
