@@ -37,6 +37,7 @@ const PlayerLobby = () => {
 
   const [raceDayData, isRaceDataLoading, raceDataApiError] = useApiGetResult({ races: [] }, raceDayEndpoint);
   const [playerData, isPlayerDataLoading, playerDataApiError] = useApiGetResult([], `${raceDayEndpoint}/leaderboard`);
+  const [placeBetText, setPlaceBetText] = useState('Place Bet');
   const [currentPlayerBalance, setCurrentPlayerBalance] = useState(0);
 
   const [advanceToRace] = useWebsocket('/eventstate');
@@ -71,7 +72,7 @@ const PlayerLobby = () => {
     });
   }, [raceDataApiError, playerDataApiError]);
 
-
+  
   const handleBetsChanged = () => {
     const wagers = getWagers();
 
@@ -98,6 +99,7 @@ const PlayerLobby = () => {
   }
 
   const handlePlaceBet = async () => {
+     setPlaceBetText('Update Bet');
     const wagers = getWagers();
 
     await postToApi('/wagers', {
@@ -144,7 +146,7 @@ const PlayerLobby = () => {
                 </div>
                 <div className={css.buttonContainer}>
                   <Card className={classes.root} onClick={handlePlaceBet}>
-                    <div>Place Bet</div>
+                    <div>{placeBetText}</div>
                   </Card>
                 </div>
               </>
