@@ -31,7 +31,7 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         width: 120,
         height: 100,
-        border: '1px solid #00000026',
+        border: '1px solid #000026',
     },
 });
 
