@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Body from '../Body/Body';
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -9,7 +9,6 @@ import css from './PlayerLobby.module.css';
 
 import useApiGetResult from "../../hooks/useLoading";
 import { postToApi } from '../../utils/apiLayer';
-import { currency } from "../../utils/constants";
 import WagerCard from '../WagerCard/WagerCard';
 import { useWebsocket } from "../../hooks/useWebsocket";
 
@@ -87,11 +86,17 @@ const PlayerLobby = () => {
       player: sessionInfo.playerId,
       wagers: wagers
     });
+
+    setCurrentPlayerBalance(getBasePlayerBalance() - aggregateWagerValues(wagers));
   };
+
+  const aggregateWagerValues = (wagers) => wagers.reduce((accum, item) => parseFloat(accum) + parseFloat(item.amount), 0);
+
+  const getBasePlayerBalance = () => playerData.players.find(x => x._id === sessionInfo.playerId).currentFunds;
 
   useEffect(() => {
     if(playerData.players !== undefined)
-      setCurrentPlayerBalance(playerData.players.find(x => x._id === sessionInfo.playerId).currentFunds);
+      setCurrentPlayerBalance(getBasePlayerBalance());
   }, [isPlayerDataLoading]);
 
 
