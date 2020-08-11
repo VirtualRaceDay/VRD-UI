@@ -18,7 +18,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { postToApi } from "../../utils/apiLayer";
+import { postToApi } from '../../utils/apiLayer';
 import css from './AddRaceCard.module.css';
 
 const useStyles = makeStyles({
