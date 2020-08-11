@@ -32,7 +32,7 @@ const PlayerLobby = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState({ error: false, messages: [] });
- 
+
   const raceDayEndpoint = `/raceday/${raceDayId}`;
 
   const [raceDayData, isRaceDataLoading, raceDataApiError] = useApiGetResult({ races: [] }, raceDayEndpoint);
@@ -50,6 +50,8 @@ const PlayerLobby = () => {
         });
     }
   }, [advanceToRace])
+
+
 
   const getNextRace = () => {
     return raceDayData.races.find((race) => {
@@ -69,9 +71,21 @@ const PlayerLobby = () => {
     });
   }, [raceDataApiError, playerDataApiError]);
 
-  const handlePlaceBet = async () => {
+
+  const handleBetsChanged = () => {
+    const wagers = getWagers();
+
+    //Replace with the current balance of the player when this feature has been implemented.
+    let currentBalance = parseFloat(raceDayData.initialStake);
+    let wagerValues = aggregateWagerValues(wagers);
+
+    setCurrentPlayerBalance(currentBalance - wagerValues);
+  }
+
+  const getWagers = () => {
     const raceCard = getNextRace();
-    const wagers = raceCard.horses.filter(horse => {
+
+    return raceCard.horses.filter(horse => {
       return (horse.bet);
     }).map(horse => {
       return {
@@ -81,13 +95,15 @@ const PlayerLobby = () => {
         amount: horse.bet
       }
     });
+  }
+
+  const handlePlaceBet = async () => {
+    const wagers = getWagers();
 
     await postToApi('/wagers', {
       player: sessionInfo.playerId,
       wagers: wagers
     });
-
-    setCurrentPlayerBalance(getBasePlayerBalance() - aggregateWagerValues(wagers));
   };
 
   const aggregateWagerValues = (wagers) => wagers.reduce((accum, item) => parseFloat(accum) + parseFloat(item.amount), 0);
@@ -95,7 +111,7 @@ const PlayerLobby = () => {
   const getBasePlayerBalance = () => playerData.players.find(x => x._id === sessionInfo.playerId).currentFunds;
 
   useEffect(() => {
-    if(playerData.players !== undefined)
+    if (playerData.players !== undefined)
       setCurrentPlayerBalance(getBasePlayerBalance());
   }, [isPlayerDataLoading]);
 
@@ -121,7 +137,7 @@ const PlayerLobby = () => {
                 <h1>Game PIN: {raceDayData.pin}</h1>
                 <div className={css.balance}>Balance: £{currentPlayerBalance}</div>
                 <div className={css.raceCardContainer}>
-                  <WagerCard raceCard={getNextRace()}>
+                  <WagerCard raceCard={getNextRace()} callback={handleBetsChanged}>
 
                   </WagerCard>
 
