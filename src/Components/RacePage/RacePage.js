@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card';
 
 import { makeStyles } from '@material-ui/core/styles';
 import css from './RacePage.module.css';
-import { putToApi, getFromApi } from "../../utils/apiLayer";
+import { putToApi } from "../../utils/apiLayer";
 import { useWebsocket } from "../../hooks/useWebsocket";
 import useApiGetResult from '../../hooks/useLoading';
 
@@ -63,7 +63,7 @@ const RacePage = () => {
 
   return (
     < Body >
-      <h3 className={css.pageContainer}>Race {raceDetails.name} in progress</h3>
+      <h3 className={css.pageContainer}>Race {raceDetails.name} in progress.<a href={raceDetails.link}>{raceDetails.link}</a></h3>
       <div className={css.buttonContainter}>
         {isHost() ? (
           <Card className={classes.root} onClick={handleOnFinishClick}>
