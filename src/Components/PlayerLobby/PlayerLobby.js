@@ -73,19 +73,19 @@ const PlayerLobby = () => {
 
 
   const handleBetsChanged = () => {
-    const raceCard = getNextRace();
-    const horses = raceCard.horses;
+    const wagers = getWagers();
 
     //Replace with the current balance of the player when this feature has been implemented.
     let currentBalance = parseFloat(raceDayData.initialStake);
     let wagerValues = aggregateWagerValues(wagers);
 
-    currentPlayerBalance(currentBalance - wagerValues);
+    setCurrentPlayerBalance(currentBalance - wagerValues);
   }
 
-  const handlePlaceBet = async () => {
+  const getWagers = () => {
     const raceCard = getNextRace();
-    const wagers = raceCard.horses.filter(horse => {
+
+    return raceCard.horses.filter(horse => {
       return (horse.bet);
     }).map(horse => {
       return {
@@ -95,13 +95,15 @@ const PlayerLobby = () => {
         amount: horse.bet
       }
     });
+  }
+
+  const handlePlaceBet = async () => {
+    const wagers = getWagers();
 
     await postToApi('/wagers', {
       player: sessionInfo.playerId,
       wagers: wagers
     });
-
-    //setCurrentPlayerBalance(getBasePlayerBalance() - aggregateWagerValues(wagers));
   };
 
   const aggregateWagerValues = (wagers) => wagers.reduce((accum, item) => parseFloat(accum) + parseFloat(item.amount), 0);
