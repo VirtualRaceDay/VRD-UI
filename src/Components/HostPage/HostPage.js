@@ -25,9 +25,10 @@ const useStyles = makeStyles({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: 120,
+        textAlign: 'center',
         height: 100,
-        border: '1px solid #000026',
+        padding: '0 1rem',
+        border: '1px solid #00000026',
         '&:hover, &:focus': {
             backgroundColor: '#fafafa',
             cursor: 'pointer',
@@ -129,8 +130,6 @@ const HostPage = () => {
                 </div>
 
                 <div className={css.pageContent}>
-                    <PreviousRaces />
-
                     <form
                         className={css.createRaceContainer}
                         noValidate
@@ -213,6 +212,8 @@ const HostPage = () => {
                             }
                         </div>
                     </form>
+
+                    <PreviousRaces />
                 </div>
             </div>
 

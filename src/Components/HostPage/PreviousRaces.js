@@ -56,7 +56,9 @@ const PreviousRaces = () => {
                                 (race) => (
                                     <TableRow key={race._id}>
                                         <TableCell component="td" scope="row">
-                                            {race.name} - {moment(race.date).format('DD-MM-YYYY')}
+                                            Race name: <strong>{race.name}</strong><br />
+                                            PIN: {race.pin}<br />
+                                            Created {moment(race.date).format('DD-MM-YYYY')}
                                         </TableCell>
                                     </TableRow>
                                 )

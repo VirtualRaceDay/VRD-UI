@@ -22,7 +22,7 @@
   flex-direction: column;
   width: 80%;
   flex-grow: 1;
-  padding: 0rem 0rem 0rem 1rem;
+  padding: 0 2rem 0 0;
 }
 
 .extraFormContent {
@@ -30,6 +30,7 @@
   padding-top: 0.5rem;
   width: 100%;
   justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
 .raceCardContainer {
