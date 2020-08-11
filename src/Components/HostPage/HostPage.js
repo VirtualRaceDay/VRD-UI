@@ -38,8 +38,8 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         width: 120,
         height: 100,
-        border: '1px solid #00000026',
-        '&:hover': {
+        border: '1px solid #000026',
+        '&:hover, &:focus': {
             backgroundColor: '#fafafa',
             cursor: 'pointer',
         },
@@ -51,8 +51,7 @@ const HostPage = () => {
     const history = useHistory();
     const props = useLocation().state;
 
-    const [previousRaces, loadingPreviousRaces] = useApiGetResult([], '/racedays')
-
+    const [previousRaces, loadingPreviousRaces] = useApiGetResult([], '/racedays');
     const [eventName, setEventName] = useState('');
     const [currency, setCurrency] = useState('');
     const [initialStake, setInitialStake] = useState(1000);
@@ -63,11 +62,15 @@ const HostPage = () => {
     const [lobbyId, setLobbyId] = useState('');
 
     useEffect(() => {
-        if (!props) return;
+        if (!props) {
+            return;
+        }
 
         setModalState(false);
 
-        if (!props.newRaceCard) return;
+        if (!props.newRaceCard) {
+            return;
+        }
 
         setRaceCards([...raceCards, props.raceCard]);
 
@@ -110,12 +113,13 @@ const HostPage = () => {
     });
 
     const handleOnStartButtonClick = async () => {
-        if (lobbyId)
+        if (lobbyId) {
             history.push('/HostLobby', {
                 sessionInfo: {
                     lobbyId
                 }
             });
+        }
     };
 
     const handleSaveRaceDayClick = async () => {
@@ -139,11 +143,11 @@ const HostPage = () => {
                 <div className={css.pageContent}>
                     <div className={css.previousRaceContainer}>
                         <TableContainer component={Paper}>
-                            <Table className={classes.table} aria-label="simple table">
+                            <Table className={classes.table} aria-label="Previous race days">
                                 <TableHead>
                                     <TableRow>
                                         <TableCell
-                                            style={{ backgroundColor: '#77DD77', color: '#ffffff' }}
+                                            style={{ backgroundColor: '#77dd77', color: '#ffffff' }}
                                         >
                                             Previous Race Days
                                         </TableCell>
@@ -196,13 +200,13 @@ const HostPage = () => {
 
                         <div className={css.extraFormContent}>
                             <FormControl className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-label">
+                                <InputLabel id="race-currency-label">
                                     Race Currency
                                 </InputLabel>
 
                                 <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
+                                    labelId="race-currency-label"
+                                    id="race-currency"
                                     value={currency}
                                     onChange={handleCurrencyChange}
                                 >
@@ -227,46 +231,37 @@ const HostPage = () => {
                             />
                         </div>
 
-                        {!raceCardSaved
-                            ? (<div />)
-                            : (
-                                <div className={css.raceCardContainer}>
-                                    <div className={css.emptyRacecard} onClick={handleModalOpen}>
-                                        <AddRaceCardButton />
-                                    </div>
-
-                                    {raceCards.map((race, key) => (
-                                        <div key={key} className={css.raceCard}>
-                                            <RaceCard raceCard={race} />
-                                        </div>
-                                    ))}
+                        {raceCardSaved && (
+                            <div className={css.raceCardContainer}>
+                                <div className={css.emptyRacecard} onClick={handleModalOpen}>
+                                    <AddRaceCardButton />
                                 </div>
-                            )
-                        }
+
+                                {raceCards.map((race, key) => (
+                                    <div key={key} className={css.raceCard}>
+                                        <RaceCard raceCard={race} />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
 
                         <div className={css.buttonContainer}>
-                            {!raceCardSaved
+                            {raceCardSaved
                                 ? (
+                                    <Card
+                                    type="submit"
+                                    className={classes.button}
+                                    onClick={handleOnStartButtonClick}
+                                >
+                                        <div>Start Race Day</div>
+                                    </Card>
+                                ) : (
                                     <Card
                                         type="submit"
                                         className={classes.button}
                                         onClick={handleSaveRaceDayClick}
                                     >
                                         <div>Create Race Day</div>
-                                    </Card>
-                                )
-                                : ('')
-                            }
-
-                            {!raceCardSaved
-                                ? ('')
-                                : (
-                                    <Card
-                                        type="submit"
-                                        className={classes.button}
-                                        onClick={handleOnStartButtonClick}
-                                    >
-                                        <div>Start Race Day</div>
                                     </Card>
                                 )
                             }
