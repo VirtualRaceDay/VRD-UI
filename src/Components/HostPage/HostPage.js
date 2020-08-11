@@ -19,7 +19,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { postToApi } from '../../utils/apiLayer';
 import Body from '../Body/Body';
-import AddRacecardDialog from '../AddRaceCard/AddRaceCard';
+import AddRaceCard from '../AddRaceCard/AddRaceCard';
 import RaceCard from '../RaceCard/RaceCard';
 import useApiGetResult from '../../hooks/useLoading';
 import AddRaceCardButton from './AddRaceCardButton';
@@ -270,7 +270,7 @@ const HostPage = () => {
                 </div>
             </div>
 
-            <AddRacecardDialog
+            <AddRaceCard
                 isOpen={modalState}
                 raceDayId={lobbyId}
             />
