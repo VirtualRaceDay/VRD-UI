@@ -6,8 +6,9 @@ import Card from '@material-ui/core/Card';
 
 import { makeStyles } from '@material-ui/core/styles';
 import css from './RacePage.module.css';
-import { putToApi } from "../../utils/apiLayer";
+import { putToApi, getFromApi } from "../../utils/apiLayer";
 import { useWebsocket } from "../../hooks/useWebsocket";
+import useApiGetResult from '../../hooks/useLoading';
 
 const useStyles = makeStyles({
   root: {
@@ -30,6 +31,7 @@ const RacePage = () => {
   const { state } = useLocation();
   const { sessionInfo } = state;
   const [advanceToRace] = useWebsocket('/eventstate');
+  const [raceDetails] = useApiGetResult({name: '', link: '', state: ''}, `/race/${state.race}`);
 
   useEffect(() => {
     if (isHost()) return;
@@ -40,6 +42,8 @@ const RacePage = () => {
       });
     }
   }, [advanceToRace, history])
+
+
 
   const handleOnFinishClick = async () => {
     // Go to api to set race as finished
@@ -59,10 +63,11 @@ const RacePage = () => {
 
   return (
     < Body >
-      <h3 className={css.pageContainer}>Race in progress</h3>
+      <h3 className={css.pageContainer}>Race {raceDetails.name} in progress</h3>
       <div className={css.buttonContainter}>
         {isHost() ? (
           <Card className={classes.root} onClick={handleOnFinishClick}>
+            
             <div>Finish Race</div>
           </Card>) : ('')}
       </div>
