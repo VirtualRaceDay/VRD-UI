@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Body from '../Body/Body';
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -9,7 +9,6 @@ import css from './PlayerLobby.module.css';
 
 import useApiGetResult from "../../hooks/useLoading";
 import { postToApi } from '../../utils/apiLayer';
-import { currency } from "../../utils/constants";
 import WagerCard from '../WagerCard/WagerCard';
 import { useWebsocket } from "../../hooks/useWebsocket";
 
@@ -33,12 +32,12 @@ const PlayerLobby = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState({ error: false, messages: [] });
+
   const raceDayEndpoint = `/raceday/${raceDayId}`;
 
   const [raceDayData, isRaceDataLoading, raceDataApiError] = useApiGetResult({ races: [] }, raceDayEndpoint);
   const [playerData, isPlayerDataLoading, playerDataApiError] = useApiGetResult([], `${raceDayEndpoint}/leaderboard`);
-  //Note, this needs to be replaced with the players current balance when this functionality has been created
-  const [raceBalance, setRaceBalance] = useState(1000);
+  const [currentPlayerBalance, setCurrentPlayerBalance] = useState(0);
 
   const [advanceToRace] = useWebsocket('/eventstate');
 
@@ -79,13 +78,9 @@ const PlayerLobby = () => {
 
     //Replace with the current balance of the player when this feature has been implemented.
     let currentBalance = parseFloat(raceDayData.initialStake);
+    let wagerValues = aggregateWagerValues(wagers);
 
-    horses.forEach(horse => {
-      if (horse.bet)
-        currentBalance -= parseFloat(horse.bet);
-    })
-
-    setRaceBalance(currentBalance);
+    currentPlayerBalance(currentBalance - wagerValues);
   }
 
   const handlePlaceBet = async () => {
@@ -105,12 +100,25 @@ const PlayerLobby = () => {
       player: sessionInfo.playerId,
       wagers: wagers
     });
+
+    //setCurrentPlayerBalance(getBasePlayerBalance() - aggregateWagerValues(wagers));
   };
+
+  const aggregateWagerValues = (wagers) => wagers.reduce((accum, item) => parseFloat(accum) + parseFloat(item.amount), 0);
+
+  const getBasePlayerBalance = () => playerData.players.find(x => x._id === sessionInfo.playerId).currentFunds;
+
+  useEffect(() => {
+    if (playerData.players !== undefined)
+      setCurrentPlayerBalance(getBasePlayerBalance());
+  }, [isPlayerDataLoading]);
+
+
 
   return (
     <Body>
       <div className={css.pageContainer}>
-        {isLoading ? (
+        {isLoading && isPlayerDataLoading ? (
           <div>Loading.....Please Wait</div>
         ) : apiError.error ? (
           <div>
@@ -125,7 +133,7 @@ const PlayerLobby = () => {
               <>
                 <h5>{raceDayData.name} - {raceDayData.races.length} RACES</h5>
                 <h1>Game PIN: {raceDayData.pin}</h1>
-                <div className={css.balance}>Balance: {currency[raceDayData.currency]}{playerData.currentFunds}</div>
+                <div className={css.balance}>Balance: £{currentPlayerBalance}</div>
                 <div className={css.raceCardContainer}>
                   <WagerCard raceCard={getNextRace()} callback={handleBetsChanged}>
 
