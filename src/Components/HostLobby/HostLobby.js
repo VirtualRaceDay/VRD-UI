@@ -38,8 +38,6 @@ const HostLobby = () => {
   const [incomingPlayer] = useWebsocket('/playerlist');
   const [players, setPlayers] = useState([]);
 
-
-
   useEffect(() => {
     if (incomingPlayer.name) {
       setPlayers(p => [...p, incomingPlayer]);
@@ -60,6 +58,12 @@ const HostLobby = () => {
     return raceData.races[0].state === 'not-started'
   };
 
+  const isLastRace = () => {
+    return (raceData.races.filter(race => {
+      return race.state === 'not-started'
+    }).length === 1)
+  }
+
   const hasAnotherRace = () => {
 
     return (nextRace !== undefined);
@@ -75,6 +79,7 @@ const HostLobby = () => {
         state: {
           race: nextRace._id,
           isHost: true,
+          isLastRace: isLastRace(),
           sessionInfo
         },
       });

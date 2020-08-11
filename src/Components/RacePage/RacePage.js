@@ -37,9 +37,16 @@ const RacePage = () => {
     if (isHost()) return;
 
     if (advanceToRace === 'finished') {
-      history.push('/PlayerLobby', {
-        sessionInfo
-      });
+      if (!isLastRace()) {
+        history.push('/PlayerLobby', {
+          sessionInfo
+        });
+      }
+      else {
+        history.push('/Podium', {
+          sessionInfo
+        });
+      }
     }
   }, [advanceToRace, history])
 
@@ -50,16 +57,26 @@ const RacePage = () => {
     const response = await putToApi(`/race/${state.race}/finish`);
 
     if (!response.error) {
-      history.push('/HostLobby',
-        {
-          sessionInfo
-        });
+      if (!isLastRace()) {
+        history.push('/HostLobby',
+          {
+            sessionInfo
+          });
+      }
+      else {
+        history.push('/Podium',
+          {
+            sessionInfo
+          });
+      }
     }
   };
 
   const isHost = () => {
     return state.isHost || false
   }
+
+  const isLastRace = () => { return state.isLastRace || false }
 
   return (
     < Body >
