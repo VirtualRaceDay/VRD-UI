@@ -113,10 +113,10 @@ const PlayerLobby = () => {
             });
         }
 
-        function onError() {
+        function onError(errorMessage) {
             setPlaceBetText('Place Bet');
 
-            toastrContainer.error('Something went wrong!', 'An error occurred...', {
+            toastrContainer.error('Something went wrong!', errorMessage, {
                 timeOut: 2000
             });
         }
@@ -129,7 +129,7 @@ const PlayerLobby = () => {
         if (response.data.wagers.length > 0) {
             onSuccess(response.data.wagers);
         } else {
-            onError();
+            onError(response);
         }
     };
 
