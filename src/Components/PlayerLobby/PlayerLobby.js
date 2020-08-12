@@ -10,7 +10,8 @@ import WagerCard from '../WagerCard/WagerCard';
 import { postToApi } from '../../utils/apiLayer';
 import { useWebsocket } from "../../hooks/useWebsocket";
 import css from './PlayerLobby.module.css';
-import toastrCss from './toastr.min.css';
+import './toastr.min.css';
+import './animate.min.css';
 
 const useStyles = makeStyles({
     root: {
@@ -145,7 +146,7 @@ const PlayerLobby = () => {
         <Body>
             <ToastContainer
                 ref={ref => toastrContainer = ref}
-                className={toastrCss.toastTopRight}
+                className="toast-top-right"
             />
 
             <div className={css.pageContainer}>
