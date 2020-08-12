@@ -41,8 +41,12 @@ const useStyles = makeStyles({
   },
 });
 
-const WagerCard = ({ raceCard }) => {
+const WagerCard = ({ raceCard, callback = () => { } }) => {
   const classes = useStyles();
+
+  const handleUpdate = () => {
+    return callback();
+  }
 
   return (
     <Body>
@@ -61,7 +65,7 @@ const WagerCard = ({ raceCard }) => {
               </TableHead>
               <TableBody>
                 {raceCard.horses.map((horse, key) => (
-                  <RaceCardLine key={key} initialHorse={horse} />
+                  <RaceCardLine key={key} initialHorse={horse} callback={handleUpdate} />
                 ))}
               </TableBody>
               <TableFooter>

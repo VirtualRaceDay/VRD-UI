@@ -11,6 +11,7 @@ import HostLobby from "./Components/HostLobby/HostLobby";
 import PlayerLobby from "./Components/PlayerLobby/PlayerLobby";
 import RacePage from "./Components/RacePage/RacePage";
 import Leaderboard from "./Components/Leaderboard/Leaderboard";
+import Podium from "./Components/Podium/Podium";
 
 const App = () => (
   <Router>
@@ -34,6 +35,9 @@ const App = () => (
         </Route>
         <Route exact path="/Race">
           <RacePage />
+        </Route>
+        <Route exact path="/Podium">
+          <Podium />
         </Route>
         <Route exact path="/Leaderboard">
           <Leaderboard />
