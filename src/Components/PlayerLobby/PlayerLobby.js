@@ -57,8 +57,6 @@ const PlayerLobby = () => {
     }
   }, [advanceToRace])
 
-
-
   const getNextRace = () => {
     return raceDayData.races.find((race) => {
       return race.state === "not-started"
@@ -82,7 +80,6 @@ const PlayerLobby = () => {
       return race.state === 'not-started'
     }).length === 1)
   }
-
 
   const handleBetsChanged = () => {
     const wagers = getWagers();
@@ -110,11 +107,12 @@ const PlayerLobby = () => {
   }
 
   const handlePlaceBet = async () => {
-     setPlaceBetText('Update Bet');
+    setPlaceBetText('Update Bet');
     const wagers = getWagers();
 
     await postToApi('/wagers', {
       player: sessionInfo.playerId,
+      race: getNextRace()._id,
       wagers: wagers
     });
   };
