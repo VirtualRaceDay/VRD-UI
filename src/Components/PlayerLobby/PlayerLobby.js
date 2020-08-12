@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ToastContainer } from 'react-toastr';
+import { ToastContainer, ToastMessage } from 'react-toastr';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -10,6 +10,7 @@ import WagerCard from '../WagerCard/WagerCard';
 import { postToApi } from '../../utils/apiLayer';
 import { useWebsocket } from "../../hooks/useWebsocket";
 import css from './PlayerLobby.module.css';
+import toastrCss from './toastr.min.css';
 
 const useStyles = makeStyles({
     root: {
@@ -100,17 +101,23 @@ const PlayerLobby = () => {
         });
     }
 
-    const handlePlaceBet = async (props) => {
+    const handlePlaceBet = async (toastrContainer) => {
         const wagers = getWagers();
 
         function onSuccess(wagers) {
             setPlaceBetText('Update Bet');
-            alert('it worked');
+
+            toastrContainer.success('Bets placed', 'It worked!', {
+                timeOut: 2000
+            });
         }
 
         function onError() {
             setPlaceBetText('Place Bet');
-            alert('it failed');
+
+            toastrContainer.error('Something went wrong!', 'An error occurred...', {
+                timeOut: 2000
+            });
         }
 
         const response = await postToApi('/wagers', {
@@ -138,7 +145,7 @@ const PlayerLobby = () => {
         <Body>
             <ToastContainer
                 ref={ref => toastrContainer = ref}
-                className="toast-top-right"
+                className={toastrCss.toastTopRight}
             />
 
             <div className={css.pageContainer}>
@@ -173,7 +180,7 @@ const PlayerLobby = () => {
                                 <div className={css.buttonContainer}>
                                     <Card
                                         className={classes.root}
-                                        onClick={handlePlaceBet}
+                                        onClick={() => handlePlaceBet(toastrContainer)}
                                         ref={toastrContainer}
                                     >
                                         <div>{placeBetText}</div>
