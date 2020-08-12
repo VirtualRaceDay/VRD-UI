@@ -18,6 +18,9 @@ import AddRaceCardButton from './AddRaceCardButton';
 import css from './HostPage.module.css';
 
 const useStyles = makeStyles({
+    table: {
+        minWidth: 200,
+    },
     formControl: {
         minWidth: 160,
     },
@@ -25,7 +28,6 @@ const useStyles = makeStyles({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        textAlign: 'center',
         height: 100,
         padding: '0 1rem',
         border: '1px solid #00000026',
@@ -33,7 +35,7 @@ const useStyles = makeStyles({
             backgroundColor: '#fafafa',
             cursor: 'pointer',
         },
-    },
+    }
 });
 
 const HostPage = () => {

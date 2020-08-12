@@ -13,6 +13,10 @@ const useStyles = makeStyles({
     width: 200,
     height: 200,
     border: '1px solid #00000026',
+    '&:hover, &:focus': {
+      backgroundColor: '#fafafa',
+      cursor: 'pointer',
+    },
   },
 });
 
