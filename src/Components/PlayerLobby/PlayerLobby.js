@@ -126,7 +126,7 @@ const PlayerLobby = () => {
             wagers: wagers
         });
 
-        if (response.data.wagers.length > 0) {
+        if (response.data.wagers && response.data.wagers.length > 0) {
             onSuccess(response.data.wagers);
         } else {
             onError(response);
