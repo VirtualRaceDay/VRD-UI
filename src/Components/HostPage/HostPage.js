@@ -119,7 +119,7 @@ const HostPage = () => {
   }
 
   const setRaceDay = (raceDay) =>{
-    const raceStarted = !(raceDay.races.some((race) => race.state === "not-started"));
+    const raceStarted = (raceDay.races.some((race) => race.state === "started" || race.state === "finished"));
     setRaceStarted(raceStarted);
     
     setEventName(raceDay.name);
@@ -129,17 +129,32 @@ const HostPage = () => {
     setRaceCards(raceDay.races);
     setLobbyId(raceDay._id);
 
-    if(raceStarted) {
-      setRaceCardSaved(true);
-    }
+
+    setRaceCardSaved(raceDay._id !== '');
+    
+
+
 
   }
 
   const onPrevRaceClick = (raceId) => {
-      getFromApi(`/raceday/${raceId}`)
-        .then((raceDay) => {
-          setRaceDay(raceDay.data);
-        });
+      if(raceId !== null){
+        getFromApi(`/raceday/${raceId}`)
+          .then((raceDay) => {
+            setRaceDay(raceDay.data);
+          })
+      } else {
+        const raceDay = {
+          _id: '',
+          name: '',
+          currency: '',
+          initialStake: 1000,
+          maxPlayers: 12,
+          races: [],
+        };
+
+        setRaceDay(raceDay);
+      }     
   };
 
   return (

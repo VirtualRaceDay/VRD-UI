@@ -12,6 +12,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 const useStyles = makeStyles({
     table: {
@@ -39,6 +40,11 @@ const PreviousRaceDay = (props) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                  <TableRow>
+                        <TableCell component="td" scope="row" className={css.previousRaceItem} onClick={() => props.onPrevRaceClick(null)}>
+                          <AddCircleIcon className={css.addRaceItem} />
+                        </TableCell>
+                  </TableRow>
                   {loadingPreviousRaces ? (
                     <TableRow>
                       <TableCell component="td" scope="row">
