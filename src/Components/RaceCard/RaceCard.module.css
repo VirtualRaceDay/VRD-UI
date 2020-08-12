@@ -1,5 +1,6 @@
 .raceCard {
-  margin: 2% 1%;
+  margin: 2% 0;
   border: 3px #fafafa solid;
   width: 100%;
+  box-sizing: border-box;
 }
