@@ -177,15 +177,16 @@ const HostPage = () => {
                         </div>
 
                         {raceCardSaved && (
-                            <div className={css.raceCardContainer}>
-                                <div className={css.emptyRacecard} onClick={handleModalOpen}>
+                            <div>
+                                <div
+                                    onClick={handleModalOpen}
+                                    style={{ 'display': 'inline-block', 'clear': 'both', 'marginTop': '1rem'}}
+                                >
                                     <AddRaceCardButton />
                                 </div>
 
                                 {raceCards.map((race, key) => (
-                                    <div key={key} className={css.raceCard}>
-                                        <RaceCard raceCard={race} />
-                                    </div>
+                                    <RaceCard raceCard={race} key={key} />
                                 ))}
                             </div>
                         )}
@@ -221,7 +222,7 @@ const HostPage = () => {
                 isOpen={modalState}
                 raceDayId={lobbyId}
             />
-        </Body >
+        </Body>
     );
 };
 
