@@ -2,35 +2,24 @@ import React, { useEffect, useState } from 'react';
 import Body from '../Body/Body';
 import { useHistory, useLocation } from 'react-router-dom';
 import randomize from 'randomatic';
-import moment from 'moment';
 
 import Card from '@material-ui/core/Card';
 import TextField from '@material-ui/core/TextField';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
+import PreviousRaceDay from '../PreviousRaceDay/PreviousRaceDay';
 
-import { postToApi } from "../../utils/apiLayer";
+import { postToApi, getFromApi } from "../../utils/apiLayer";
 
 import css from './HostPage.module.css';
 import AddRacecardDialog from '../AddRaceCard/AddRaceCard';
 import RaceCard from '../RaceCard/RaceCard';
-import useApiGetResult from "../../hooks/useLoading";
 import AddRaceCardButton from "./AddRaceCardButton";
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 200,
-  },
   formControl: {
     minWidth: 160,
   },
@@ -53,7 +42,7 @@ const HostPage = () => {
   const history = useHistory();
   const props = useLocation().state;
 
-  const [previousRaces, loadingPreviousRaces] = useApiGetResult([], '/racedays')
+  const [raceStarted, setRaceStarted] = useState(false);
 
   const [eventName, setEventName] = useState('');
   const [currency, setCurrency] = useState('');
@@ -129,6 +118,30 @@ const HostPage = () => {
     setRaceCardSaved(true);
   }
 
+  const setRaceDay = (raceDay) =>{
+    const raceStarted = !(raceDay.races.some((race) => race.state === "not-started"));
+    setRaceStarted(raceStarted);
+    
+    setEventName(raceDay.name);
+    setCurrency(raceDay.currency);
+    setInitialStake(raceDay.initialStake);
+    setMaxPlayers(raceDay.maxPlayers);
+    setRaceCards(raceDay.races);
+    setLobbyId(raceDay._id);
+
+    if(raceStarted) {
+      setRaceCardSaved(true);
+    }
+
+  }
+
+  const onPrevRaceClick = (raceId) => {
+      getFromApi(`/raceday/${raceId}`)
+        .then((raceDay) => {
+          setRaceDay(raceDay.data);
+        });
+  };
+
   return (
     <Body>
       <div className={css.pageContainer}>
@@ -137,43 +150,7 @@ const HostPage = () => {
         </div>
 
         <div className={css.pageContent}>
-          <div className={css.previousRaceContainer}>
-            <TableContainer component={Paper}>
-              <Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell
-                      style={{ backgroundColor: '#77DD77', color: '#ffffff' }}
-                    >
-                      Previous Race Days
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {loadingPreviousRaces ? (
-                    <TableRow>
-                      <TableCell component="td" scope="row">
-                        Loading Races...
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                      previousRaces.mapOrDefault(
-                        (<TableRow key="default">
-                          <TableCell component="td" scope="row">
-                            No previous races
-                        </TableCell>
-                        </TableRow>),
-                        (race) => (
-                          <TableRow key={race._id}>
-                            <TableCell component="td" scope="row">
-                              {race.name} - {moment(race.date).format('DD-MM-YYYY')}
-                            </TableCell>
-                          </TableRow>
-                        )))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
+          <PreviousRaceDay onPrevRaceClick={onPrevRaceClick} />
 
           <form
             className={css.createRaceContainer}
@@ -186,6 +163,7 @@ const HostPage = () => {
               label="Enter Event Name"
               value={eventName}
               onChange={handleNameChange}
+              disabled={raceStarted}
             />
             <div className={css.extraFormContent}>
               <FormControl className={classes.formControl}>
@@ -197,6 +175,7 @@ const HostPage = () => {
                   id="demo-simple-select"
                   value={currency}
                   onChange={handleCurrencyChange}
+                  disabled={raceStarted}
                 >
                   <MenuItem value={'GPB'}>GPB (£) Sterling</MenuItem>
                   <MenuItem value={'USD'}>USD ($) Dollars</MenuItem>
@@ -208,19 +187,23 @@ const HostPage = () => {
                 label="Initial Stake"
                 value={initialStake}
                 onChange={handleInitialStakeChange}
+                disabled={raceStarted}
               />
               <TextField
                 id="standard-basic"
                 label="Max Players"
                 value={maxPlayers}
                 onChange={handleMaxPlayersChange}
+                disabled={raceStarted}
               />
             </div>
             {!raceCardSaved ? (<div></div>) : (
               <div className={css.raceCardContainer}>
+                {raceStarted ? (<div></div>) : (
                 <div className={css.emptyRacecard} onClick={handleModalOpen}>
                   <AddRaceCardButton />
-                </div>
+                </div>)
+                }
                 {raceCards.map((race, key) => (
                   <div key={key} className={css.raceCard}>
                     <RaceCard raceCard={race} />
@@ -236,7 +219,7 @@ const HostPage = () => {
                 >
                   <div>Create Race Day</div>
                 </Card>) : ('')}
-              {!raceCardSaved ? ('') : (
+              {!raceCardSaved || raceStarted ? ('') : (
                 <Card
                   type="submit"
                   className={classes.button}

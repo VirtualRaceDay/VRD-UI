@@ -1,0 +1,10 @@
+.previousRaceContainer {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+  }
+
+  .previousRaceItem:hover {
+      cursor: pointer;
+      background-color: rgb(245, 245, 245);
+  }
