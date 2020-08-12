@@ -1,13 +1,15 @@
 .emptyRacecard {
     margin: 2% 1%;
-    border-radius: 5%;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px #fafafa solid;
+    border: 1px #00000026 solid;
+    padding: 1rem;
     height: 98%;
     width: 200px;
     flex-direction: column;
+    box-sizing: border-box;
 }
 
 .emptyRacecard:hover {

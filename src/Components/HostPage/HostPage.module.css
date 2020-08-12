@@ -41,26 +41,11 @@
 .raceCardContainer {
   flex-grow: 1;
   display: flex;
-  overflow-x: auto;
   margin: 1rem 0rem;
-  height: 21rem;
-  align-items: center;
+  flex-wrap: wrap;
   width: 100%;
   border: 1px solid #00000026;
-}
-
-.emptyRacecard {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.raceCard {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+  box-sizing: border-box;
 }
 
 .buttonContainer {

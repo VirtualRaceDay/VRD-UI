@@ -217,15 +217,15 @@ const HostPage = () => {
               />
             </div>
             {!raceCardSaved ? (<div></div>) : (
-              <div className={css.raceCardContainer}>
-                <div className={css.emptyRacecard} onClick={handleModalOpen}>
+                <div>
+                <div onClick={handleModalOpen}>
                   <AddRaceCardButton />
                 </div>
+              <div className={css.raceCardContainer}>
                 {raceCards.map((race, key) => (
-                  <div key={key} className={css.raceCard}>
-                    <RaceCard raceCard={race} />
-                  </div>
+                    <RaceCard raceCard={race} key={key} />
                 ))}
+              </div>
               </div>)}
             <div className={css.buttonContainer}>
               {!raceCardSaved ? (
