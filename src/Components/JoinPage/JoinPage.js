@@ -17,6 +17,10 @@ const useStyles = makeStyles({
     width: 120,
     height: 80,
     border: '1px solid #00000026',
+    '&:hover, &:focus': {
+      backgroundColor: '#fafafa',
+      cursor: 'pointer',
+    },
   },
 });
 

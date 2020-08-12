@@ -18,7 +18,7 @@ const useStyles = makeStyles({
     width: 120,
     height: 80,
     border: '1px solid #00000026',
-    '&:hover': {
+    '&:hover, &:focus': {
       backgroundColor: '#fafafa',
       cursor: 'pointer',
     },
@@ -84,7 +84,7 @@ const RacePage = () => {
       <div className={css.buttonContainter}>
         {isHost() ? (
           <Card className={classes.root} onClick={handleOnFinishClick}>
-            
+
             <div>Finish Race</div>
           </Card>) : ('')}
       </div>
