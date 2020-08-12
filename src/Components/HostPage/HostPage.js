@@ -218,7 +218,7 @@ const HostPage = () => {
             </div>
             {!raceCardSaved ? (<div></div>) : (
                 <div>
-                <div onClick={handleModalOpen}>
+                <div onClick={handleModalOpen} style={{ 'display': 'inline-block', 'clear': 'both', 'margin-top': '1rem'}}>
                   <AddRaceCardButton />
                 </div>
               <div className={css.raceCardContainer}>
