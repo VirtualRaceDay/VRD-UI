@@ -11,6 +11,7 @@ import useApiGetResult from "../../hooks/useLoading";
 import { postToApi } from '../../utils/apiLayer';
 import WagerCard from '../WagerCard/WagerCard';
 import { useWebsocket } from "../../hooks/useWebsocket";
+import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles({
   root: {
@@ -24,6 +25,12 @@ const useStyles = makeStyles({
       backgroundColor: '#fafafa',
       cursor: 'pointer',
     },
+  },
+  balanceError: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: '1em',
+    color: red[900],
   }
 });
 
@@ -43,6 +50,7 @@ const PlayerLobby = () => {
   const [playerData, isPlayerDataLoading, playerDataApiError] = useApiGetResult([], `${raceDayEndpoint}/leaderboard`);
   const [placeBetText, setPlaceBetText] = useState('Place Bet');
   const [currentPlayerBalance, setCurrentPlayerBalance] = useState(0);
+  const [balanceError, setBalanceError] = useState({ error: false, message: ''});
 
   const [advanceToRace] = useWebsocket('/eventstate');
 
@@ -85,8 +93,8 @@ const PlayerLobby = () => {
     const wagers = getWagers();
 
     //Replace with the current balance of the player when this feature has been implemented.
-    let currentBalance = parseFloat(raceDayData.initialStake);
-    let wagerValues = aggregateWagerValues(wagers);
+    const currentBalance = getBasePlayerBalance();
+    const wagerValues = aggregateWagerValues(wagers);
 
     setCurrentPlayerBalance(currentBalance - wagerValues);
   }
@@ -107,14 +115,24 @@ const PlayerLobby = () => {
   }
 
   const handlePlaceBet = async () => {
+    setBalanceError({error: false, message: ''});
     setPlaceBetText('Update Bet');
     const wagers = getWagers();
 
-    await postToApi('/wagers', {
-      player: sessionInfo.playerId,
-      race: getNextRace()._id,
-      wagers: wagers
-    });
+    const wagerValues = aggregateWagerValues(wagers);
+    const playerBalance = getBasePlayerBalance();
+
+    if(wagerValues > playerBalance)
+    {
+      setBalanceError({error: true, message: 'You don\'t have enough funds to place this bet'});
+    } else {
+      await postToApi('/wagers', {
+        player: sessionInfo.playerId,
+        race: getNextRace()._id,
+        wagers: wagers
+      });
+    }
+
   };
 
   const aggregateWagerValues = (wagers) => wagers.reduce((accum, item) => parseFloat(accum) + parseFloat(item.amount), 0);
@@ -154,6 +172,7 @@ const PlayerLobby = () => {
 
                 </div>
                 <div className={css.buttonContainer}>
+                  {balanceError.error ? (<div className={classes.balanceError}>{balanceError.message}</div>) : (<div></div>)}
                   <Card className={classes.root} onClick={handlePlaceBet}>
                     <div>{placeBetText}</div>
                   </Card>
