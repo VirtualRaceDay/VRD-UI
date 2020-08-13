@@ -8,7 +8,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
-import PreviousRaceDay from '../PreviousRaceDay/PreviousRaceDay';
 
 import { postToApi, getFromApi } from '../../utils/apiLayer';
 import Body from '../Body/Body';

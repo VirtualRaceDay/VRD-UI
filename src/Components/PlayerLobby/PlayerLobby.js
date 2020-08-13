@@ -83,10 +83,8 @@ const PlayerLobby = () => {
     const handleBetsChanged = () => {
         const wagers = getWagers();
 
-        //Replace with the current balance of the player
-        //when this feature has been implemented.
-        let currentBalance = parseFloat(raceDayData.initialStake);
-        let wagerValues = aggregateWagerValues(wagers);
+        const currentBalance = getBasePlayerBalance();
+        const wagerValues = aggregateWagerValues(wagers);
 
         setCurrentPlayerBalance(currentBalance - wagerValues);
     }
@@ -130,10 +128,15 @@ const PlayerLobby = () => {
         if(wagerValues > playerBalance) {
           onError('Not enough funds to place wager');
         } else {
+          const raceCard = getNextRace();
           const response = await postToApi('/wagers', {
+
             player: sessionInfo.playerId,
-            wagers: wagers
+            wagers: wagers,
+            race: raceCard._id,
           });
+          console.log(sessionInfo.playerId)
+          console.log(response);
 
           if (response.data.wagers && response.data.wagers.length > 0) {
               onSuccess(response.data.wagers);
