@@ -108,6 +108,8 @@ const PlayerLobby = () => {
 
     const handlePlaceBet = async (toastrContainer) => {
         const wagers = getWagers();
+        const wagerValues = aggregateWagerValues(wagers);
+        const playerBalance = getBasePlayerBalance();
 
         function onSuccess(wagers) {
             setPlaceBetText('Update Bet');
@@ -120,21 +122,27 @@ const PlayerLobby = () => {
         function onError(errorMessage) {
             setPlaceBetText('Place Bet');
 
-            toastrContainer.error('Something went wrong!', errorMessage, {
+            toastrContainer.error(errorMessage, 'Something went wrong!', {
                 timeOut: 2000
             });
         }
 
-        const response = await postToApi('/wagers', {
+        if(wagerValues > playerBalance) {
+          onError('Not enough funds to place wager');
+        } else {
+          const response = await postToApi('/wagers', {
             player: sessionInfo.playerId,
             wagers: wagers
-        });
+          });
 
-        if (response.data.wagers && response.data.wagers.length > 0) {
-            onSuccess(response.data.wagers);
-        } else {
-            onError(response);
+          if (response.data.wagers && response.data.wagers.length > 0) {
+              onSuccess(response.data.wagers);
+          } else {
+              onError(response);
+          }
         }
+
+        
     };
 
     const aggregateWagerValues = (wagers) => wagers.reduce((accum, item) => parseFloat(accum) + parseFloat(item.amount), 0);
