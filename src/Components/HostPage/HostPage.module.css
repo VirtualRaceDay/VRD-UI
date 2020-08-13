@@ -17,18 +17,12 @@
   flex-grow: 1;
 }
 
-.previousRaceContainer {
-  display: flex;
-  flex-direction: column;
-  width: 20%;
-}
-
 .createRaceContainer {
   display: flex;
   flex-direction: column;
   width: 80%;
   flex-grow: 1;
-  padding: 0rem 0rem 0rem 1rem;
+  padding: 0 2rem 0 0;
 }
 
 .extraFormContent {
@@ -36,31 +30,17 @@
   padding-top: 0.5rem;
   width: 100%;
   justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
 .raceCardContainer {
   flex-grow: 1;
   display: flex;
-  overflow-x: auto;
   margin: 1rem 0rem;
-  height: 21rem;
-  align-items: center;
+  flex-wrap: wrap;
   width: 100%;
   border: 1px solid #00000026;
-}
-
-.emptyRacecard {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.raceCard {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+  box-sizing: border-box;
 }
 
 .buttonContainer {

@@ -20,7 +20,11 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         width: 120,
         height: 80,
-        border: '1px solid #00000026'
+        border: '1px solid #00000026',
+        '&:hover, &:focus': {
+            backgroundColor: '#fafafa',
+            cursor: 'pointer',
+        },
     }
 });
 
@@ -57,6 +61,7 @@ const PlayerLobby = () => {
             return race.state === "not-started"
         });
     }
+<<<<<<< HEAD
 
     useEffect(() => {
         setIsLoading(isRaceDataLoading || isPlayerDataLoading);
