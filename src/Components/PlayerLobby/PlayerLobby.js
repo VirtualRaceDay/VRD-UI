@@ -61,7 +61,6 @@ const PlayerLobby = () => {
             return race.state === "not-started"
         });
     }
-<<<<<<< HEAD
 
     useEffect(() => {
         setIsLoading(isRaceDataLoading || isPlayerDataLoading);
