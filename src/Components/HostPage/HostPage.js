@@ -8,7 +8,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
-import PreviousRaceDay from '../PreviousRaceDay/PreviousRaceDay';
 
 import { postToApi, getFromApi } from '../../utils/apiLayer';
 import Body from '../Body/Body';
@@ -129,15 +128,15 @@ const HostPage = () => {
     const setRaceDay = (raceDay) =>{
       const raceStarted = (raceDay.races.some((race) => race.state === "started" || race.state === "finished"));
       setRaceStarted(raceStarted);
-      
+
       setEventName(raceDay.name);
       setCurrency(raceDay.currency);
       setInitialStake(raceDay.initialStake);
       setMaxPlayers(raceDay.maxPlayers);
       setRaceCards(raceDay.races);
       setLobbyId(raceDay._id);
-  
-  
+
+
       setRaceCardSaved(raceDay._id !== '');
     }
 
@@ -158,7 +157,7 @@ const HostPage = () => {
         };
 
         setRaceDay(raceDay);
-      }     
+      }
   };
 
     return (

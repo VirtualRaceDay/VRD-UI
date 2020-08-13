@@ -1,29 +1,34 @@
 import React from 'react';
-import css from './Header.module.css';
 import { useHistory } from 'react-router-dom';
-
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
+import css from './Header.module.css';
+
 const Header = () => {
-  const history = useHistory();
+    const history = useHistory();
 
-  const handleOnLogoClick = () => {
-    history.push('/');
-  };
+    const handleOnLogoClick = () => {
+        history.push('/');
+    };
 
-  return (
-    <div className={css.header}>
-      <AppBar
-        position="static"
-        style={{ background: '#77DD77', color: '#ffffff' }}
-      >
-        <Toolbar>
-          <h3 onClick={handleOnLogoClick}>A DAY AT THE RACES</h3>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+    return (
+        <div className={css.header}>
+            <AppBar
+                position="static"
+                style={{ background: '#77DD77', color: '#ffffff' }}
+            >
+                <Toolbar>
+                    <button
+                        type="button"
+                        onClick={handleOnLogoClick}
+                    >
+                        A day at the races
+                    </button>
+                </Toolbar>
+            </AppBar>
+        </div>
+    );
 };
 
 export default Header;
