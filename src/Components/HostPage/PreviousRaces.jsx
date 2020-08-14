@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from '@material-ui/core/styles';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import useApiGetResult from '../../hooks/useLoading';
 import css from './HostPagePreviousRaces.module.css';
@@ -18,7 +19,7 @@ const useStyles = makeStyles({
     },
 });
 
-const PreviousRaces = () => {
+const PreviousRaces = (props) => {
     const classes = useStyles();
     const [previousRaces, loadingPreviousRaces] = useApiGetResult([], '/racedays');
 
@@ -37,6 +38,13 @@ const PreviousRaces = () => {
                     </TableHead>
 
                     <TableBody>
+
+                    <TableRow>
+                        <TableCell component="td" scope="row" className={css.previousRaceItem} onClick={() => props.onPrevRaceClick(null)}>
+                          <AddCircleIcon className={css.addRaceItem} />
+                        </TableCell>
+                    </TableRow>
+
                         {loadingPreviousRaces
                             ? (
                                 <TableRow>
@@ -55,7 +63,7 @@ const PreviousRaces = () => {
                                 ),
                                 (race) => (
                                     <TableRow key={race._id}>
-                                        <TableCell component="td" scope="row">
+                                        <TableCell className={css.previousRaceItem} component="td" scope="row" onClick={() => props.onPrevRaceClick(race._id)}>
                                             Race name: <strong>{race.name}</strong><br />
                                             PIN: {race.pin}<br />
                                             Created {moment(race.date).format('DD-MM-YYYY')}
