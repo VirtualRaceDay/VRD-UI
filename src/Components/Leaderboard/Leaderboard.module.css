@@ -1,34 +1,34 @@
 .pageContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex-grow: 1;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+    align-items: center;
 }
 
 .pageContent {
-  display: flex;
-  width: 100%;
-  flex-grow: 1;
-  justify-content: space-around;
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+    justify-content: space-around;
 }
 
 .leaderboardTable {
-  width: 50%;
-  min-width: 600px;
+    width: 50%;
+    min-width: 600px;
 }
 
 .buttonContainer {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .finishContainer {
-  display: flex;
+    display: flex;
 }
 
 .beginContainer {
-  display: flex;
-  padding-left: 1rem;
+    display: flex;
+    padding-left: 1rem;
 }
