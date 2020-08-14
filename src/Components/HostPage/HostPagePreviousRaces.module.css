@@ -3,3 +3,14 @@
   flex-direction: column;
   width: 20%;
 }
+
+.previousRaceItem:hover {
+  cursor: pointer;
+  background-color: rgb(245, 245, 245);
+}
+
+.addRaceItem {
+  display: block!important;
+  margin: 0 auto;
+  color: rgb(119, 221, 119);
+}
