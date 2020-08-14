@@ -1,17 +1,17 @@
 .pageContainer {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .joinDetailsContainer {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
 }
 
 .joinButtonContainer {
-  display: flex;
-  justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
 }
