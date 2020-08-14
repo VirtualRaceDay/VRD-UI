@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { postToApi } from '../../utils/apiLayer';
+import { postToApi, getFromApi } from '../../utils/apiLayer';
 import Body from '../Body/Body';
 import PreviousRaces from './PreviousRaces';
 import AddRaceCard from '../AddRaceCard/AddRaceCard';
@@ -51,6 +51,7 @@ const HostPage = () => {
     const [modalState, setModalState] = useState(false);
     const [raceCardSaved, setRaceCardSaved] = useState(false);
     const [lobbyId, setLobbyId] = useState('');
+    const [raceStarted, setRaceStarted] = useState(false);
 
     useEffect(() => {
         if (!props) {
@@ -123,6 +124,41 @@ const HostPage = () => {
 
         setRaceCardSaved(true);
     }
+
+    const setRaceDay = (raceDay) =>{
+      const raceStarted = (raceDay.races.some((race) => race.state === "started" || race.state === "finished"));
+      setRaceStarted(raceStarted);
+      
+      setEventName(raceDay.name);
+      setCurrency(raceDay.currency);
+      setInitialStake(raceDay.initialStake);
+      setMaxPlayers(raceDay.maxPlayers);
+      setRaceCards(raceDay.races);
+      setLobbyId(raceDay._id);
+  
+  
+      setRaceCardSaved(raceDay._id !== '');
+    }
+
+    const onPrevRaceClick = (raceId) => {
+      if(raceId !== null){
+        getFromApi(`/raceday/${raceId}`)
+          .then((raceDay) => {
+            setRaceDay(raceDay.data);
+          })
+      } else {
+        const raceDay = {
+          _id: '',
+          name: '',
+          currency: '',
+          initialStake: 1000,
+          maxPlayers: 12,
+          races: [],
+        };
+
+        setRaceDay(raceDay);
+      }     
+  };
 
     return (
         <Body>
@@ -216,7 +252,7 @@ const HostPage = () => {
                         </div>
                     </form>
 
-                    <PreviousRaces />
+                    <PreviousRaces onPrevRaceClick={onPrevRaceClick} />
                 </div>
             </div>
 
