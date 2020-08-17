@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import randomize from 'randomatic';
-import Card from '@material-ui/core/Card';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
+
+import {
+    Card,
+    TextField,
+    Select,
+    InputLabel,
+    MenuItem,
+    FormControl
+} from '@material-ui/core';
 
 import { postToApi, getFromApi } from '../../utils/apiLayer';
 import Body from '../Body/Body';

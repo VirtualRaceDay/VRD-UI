@@ -3,13 +3,13 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 
-import css from './HostLobby.module.css';
-
 import PlayerIdentifier from '../PlayerIdentifier/PlayerIdentifier';
 import Body from '../Body/Body';
 import { useWebsocket } from "../../hooks/useWebsocket";
 import useApiGetResult from "../../hooks/useLoading";
 import { putToApi } from "../../utils/apiLayer";
+
+import css from './HostLobby.module.css';
 
 const useStyles = makeStyles({
   root: {

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import Body from '../Body/Body';
 import { useHistory } from 'react-router-dom';
-
-import Card from '@material-ui/core/Card';
-import TextField from '@material-ui/core/TextField';
-
+import { Card, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
 import css from './JoinPage.module.css';
 import { postToApi } from "../../utils/apiLayer";
 
