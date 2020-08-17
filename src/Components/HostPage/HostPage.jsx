@@ -128,15 +128,15 @@ const HostPage = () => {
     const setRaceDay = (raceDay) =>{
       const raceStarted = (raceDay.races.some((race) => race.state === "started" || race.state === "finished"));
       setRaceStarted(raceStarted);
-      
+
       setEventName(raceDay.name);
       setCurrency(raceDay.currency);
       setInitialStake(raceDay.initialStake);
       setMaxPlayers(raceDay.maxPlayers);
       setRaceCards(raceDay.races);
       setLobbyId(raceDay._id);
-  
-  
+
+
       setRaceCardSaved(raceDay._id !== '');
     }
 
@@ -157,7 +157,7 @@ const HostPage = () => {
         };
 
         setRaceDay(raceDay);
-      }     
+      }
   };
 
     return (
